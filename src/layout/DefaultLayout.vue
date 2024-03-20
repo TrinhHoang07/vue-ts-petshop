@@ -1,15 +1,20 @@
-
 <script setup lang="ts">
-    import FooterView from '@/components/FooterView.vue';
-    import HeaderView from '@/components/HeaderView.vue';
+import FooterView from '@/components/Footer/FooterView.vue';
+import HeaderView from '@/components/Header/HeaderView.vue';
 </script>
 
 <template>
     <main class="main">
         <HeaderView />
-        <div class="contents">
-            <router-view></router-view>
+        <div class="rest">
+            <div class="contents">
+                <router-view></router-view>
+            </div>
+            <FooterView />
         </div>
-        <FooterView />
     </main>
 </template>
+
+<style>
+@import '@/assets/sass/DefaultLayout.scss';
+</style>

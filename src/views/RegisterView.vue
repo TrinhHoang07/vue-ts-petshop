@@ -1,8 +1,281 @@
 <script setup lang="ts">
+import logo from '@/assets/images/logo-petshop.jpg';
+import routesConfig from '@/config/routes';
+import { ref, reactive } from 'vue';
+
+const errors = reactive<
+    | {
+          name: boolean;
+          email: boolean;
+          password: boolean;
+          confirmPassword: boolean;
+          checkpass: boolean;
+      }
+    | any
+>({
+    checkpass: false,
+    confirmPassword: false,
+    email: false,
+    name: false,
+    password: false,
+});
+
+const name = ref<string>('');
+const email = ref<string>('');
+const password = ref<string>('');
+const confirmPassword = ref<string>('');
+
+const handleError = (name: string) => {
+    errors[`${name}`] = true;
+};
+
+const handleClearError = (name: string) => {
+    errors[`${name}`] = false;
+};
 </script>
 
 <template>
-  <div>
-    REGISTER PAGE
-  </div>
+    <div class="login">
+        <div class="contents">
+            <div class="logo">
+                <img :src="logo" alt="logo shop" />
+            </div>
+            <div class="heading">
+                <h3>Sign up to PetShop</h3>
+                <p>Vui lòng nhập đầy đủ thông tin của bạn</p>
+            </div>
+            <div class="login-form">
+                <form
+                    @submit="
+                        (e) => {
+                            e.preventDefault();
+
+                            if (!name.trim()) {
+                                handleError('name');
+                            } else {
+                                handleClearError('name');
+                            }
+                            if (!email.trim()) {
+                                handleError('email');
+                            } else {
+                                handleClearError('email');
+                            }
+                            if (!password.trim()) {
+                                handleError('password');
+                            } else {
+                                handleClearError('password');
+                            }
+                            if (!confirmPassword.trim()) {
+                                handleError('confirmPassword');
+                            } else {
+                                handleClearError('confirmPassword');
+                            }
+                            if (password.trim() !== confirmPassword.trim()) {
+                                handleError('checkpass');
+                            } else {
+                                handleClearError('checkpass');
+                            }
+                        }
+                    "
+                    class="form-container"
+                >
+                    <div class="form-item">
+                        <label htmlFor="name">Tài khoản: </label>
+                        <input
+                            id="name"
+                            type="text"
+                            placeholder="Your name..."
+                            v-model="name"
+                            @input="
+                                () => {
+                                    handleClearError('name');
+                                    // onInput={(e) => handleFocus(e.target as HTMLInputElement)}
+                                }
+                            "
+                            @blue="
+                                () => {
+                                    // onBlur={(e) => handleBlur(e.target)}
+                                }
+                            "
+                        />
+                        <p v-if="errors.name" class="error-field">This field is required!</p>
+                    </div>
+                    <div class="form-item">
+                        <label htmlFor="email">Email: </label>
+                        <input
+                            id="email"
+                            type="text"
+                            placeholder="Your email..."
+                            v-model="email"
+                            @input="
+                                () => {
+                                    handleClearError('email');
+                                    // onInput={(e) => handleFocus(e.target as HTMLInputElement)}
+                                }
+                            "
+                            @blue="
+                                () => {
+                                    // onBlur={(e) => handleBlur(e.target)}
+                                }
+                            "
+                        />
+                        <p v-if="errors.email" class="error-field">This field is required!</p>
+                    </div>
+                    <div class="form-item">
+                        <label htmlFor="password">Mật khẩu: </label>
+                        <input
+                            id="password"
+                            type="text"
+                            placeholder="Password..."
+                            v-model="password"
+                            @input="
+                                () => {
+                                    handleClearError('password');
+                                    // onInput={(e) => handleFocus(e.target as HTMLInputElement)}
+                                }
+                            "
+                            @blue="
+                                () => {
+                                    // onBlur={(e) => handleBlur(e.target)}
+                                }
+                            "
+                        />
+                        <p v-if="errors.password" class="error-field">
+                            Password Minimum eight characters, at least one letter, one number and one special
+                            character!
+                        </p>
+                    </div>
+                    <div class="form-item">
+                        <label htmlFor="confirmPassword">Nhập lại mật khẩu: </label>
+                        <input
+                            id="confirmPassword"
+                            type="text"
+                            placeholder="Confirm password..."
+                            v-model="confirmPassword"
+                            @input="
+                                () => {
+                                    handleClearError('confirmPassword');
+                                    // onInput={(e) => handleFocus(e.target as HTMLInputElement)}
+                                }
+                            "
+                            @blue="
+                                () => {
+                                    // onBlur={(e) => handleBlur(e.target)}
+                                }
+                            "
+                        />
+                        <p v-if="errors.confirmPassword" class="error-field">This field is required!</p>
+                        <p v-if="errors.checkpass" class="error-field">Mật khẩu không khớp!</p>
+                    </div>
+                    <div class="form-submit">
+                        <button type="submit">ĐĂNG KÝ</button>
+                        <p>Bạn đã có tài khoản. <RouterLink :to="routesConfig.login">Đăng nhập</RouterLink></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
+
+<style lang="scss" scoped>
+.login {
+    padding: 48px 0 64px 0;
+}
+
+.contents {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heading {
+    text-align: center;
+    h3 {
+        font-size: 2.8rem;
+        font-weight: 600;
+    }
+
+    p {
+        font-weight: 300;
+        font-size: 1.4rem;
+        text-align: center;
+        width: 230px;
+        margin-top: 8px;
+        margin-left: 12px;
+    }
+}
+
+.logo {
+    width: 180px;
+    height: 180px;
+    display: flex;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.login-form {
+    width: 380px;
+}
+
+.form-item {
+    display: flex;
+    flex-direction: column;
+    color: #333;
+    font-size: 15px;
+    padding: 8px 0;
+
+    input {
+        margin-top: 4px;
+        caret-color: #333;
+        color: #999;
+        outline: none;
+        border: 1px solid #d7d7d7;
+        padding: 12px 0 12px 12px;
+        border-radius: 6px;
+    }
+}
+
+.form-submit {
+    padding-top: 8px;
+    text-align: center;
+
+    button {
+        padding: 12px 24px;
+        background-color: dodgerblue;
+        color: #fff;
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    p {
+        margin-top: 12px;
+        font-weight: 300;
+        font-size: 1.4rem;
+    }
+
+    a {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.error-field {
+    color: red;
+    font-weight: 300;
+    font-size: 14px;
+    &::before {
+        display: inline;
+        content: '⚠ ';
+    }
+}
+</style>
