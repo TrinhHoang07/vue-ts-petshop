@@ -3,12 +3,6 @@ import routesConfig from '@/config/routes';
 import { RouterLink } from 'vue-router';
 import Filter from './Filter.vue';
 import SuggestProducts from './SuggestProducts.vue';
-
-// type TProps = {
-//     value: [number, number];
-// };
-
-// const props = defineProps<TProps>();
 </script>
 <template>
     <div class="bar-products">
