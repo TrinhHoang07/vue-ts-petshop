@@ -25,13 +25,22 @@
     font-size: 1.5rem;
 }
 
-.p-galleria-thumbnail-item {
+.p-galleria-thumbnail-items-container {
     flex: unset !important;
     padding: 0 8px;
 }
 
 .p-tabview-title {
-    font-size: 1.5rem;
+    padding: 0 12px 16px 12px;
+}
+
+.p-tabview-title,
+.p-tabview-panels {
+    font-size: 1.6rem;
+}
+
+.p-tabview-panels {
+    padding-top: 16px;
 }
 
 .p-rating .p-rating-item .p-rating-icon {
@@ -67,20 +76,38 @@ span.p-dialog-header-close-icon.pi.pi-times {
     font-size: 16px;
 }
 
+.p-dialog.p-component.p-ripple-disabled.p-confirm-dialog {
+    padding: 16px 20px;
+}
+
 .p-confirm-dialog-message {
     font-size: 16px;
 }
 
 button.p-button.p-component.p-confirm-dialog-reject.p-button-text {
     font-size: 16px;
+    padding: 10px 12px;
+    margin-top: 12px;
 }
 
 button.p-button.p-component.p-confirm-dialog-accept {
     font-size: 16px;
+    padding: 10px 12px;
+    margin-top: 12px;
 }
 
 .p-toast-message {
+    padding: 12px 24px;
+}
+
+.p-toast-message-text {
+    margin-left: 8px;
     width: 300px !important;
+}
+
+.p-toast-summary,
+.p-toast-detail {
+    font-size: 16px;
 }
 /* 
 .p-tabview-nav {

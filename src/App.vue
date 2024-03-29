@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import AOS from 'aos';
-import { onBeforeMount, onMounted } from 'vue';
+import { onBeforeMount } from 'vue';
+import ConfirmToast from '@/context/ConfirmToastContext.vue';
 
 onBeforeMount(() => {
     AOS.init({
@@ -14,5 +15,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <RouterView />
+    <ConfirmToast>
+        <RouterView />
+    </ConfirmToast>
 </template>
