@@ -15,6 +15,9 @@ import NewsView from '@/views/News/NewsView.vue';
 import ContactView from '@/views/ContactView.vue';
 import SearchView from '@/views/SearchView.vue';
 import NotFound from '@/views/NotFound.vue';
+import ShopView from '@/views/ShopView.vue';
+import DetailProduct from '@/views/DetailProduct.vue';
+import Categories from '@/views/Categories.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,6 +76,21 @@ const router = createRouter({
                     component: SearchView,
                     name: 'search',
                     path: routesConfig.search,
+                },
+                {
+                    component: ShopView,
+                    name: 'shop',
+                    path: routesConfig.shop,
+                },
+                {
+                    component: DetailProduct,
+                    name: 'detailProduct',
+                    path: routesConfig.detail,
+                },
+                {
+                    component: Categories,
+                    name: 'categories',
+                    path: routesConfig.categories,
                 },
             ],
         },

@@ -11,6 +11,7 @@ import img2 from '@/assets/images/img-2-desktop-slider.jpg';
 import img3 from '@/assets/images/img-3-desktop-slider.jpg';
 import { RouterLink } from 'vue-router';
 import ButtonView from '@/components/ButtonView.vue';
+import routesConfig from '@/config/routes';
 </script>
 
 <template>
@@ -51,7 +52,7 @@ import ButtonView from '@/components/ButtonView.vue';
                                 like dogs. Do you like cats?
                             </p>
                         </div>
-                        <RouterLink to="{routesConfig.shop}" class="btn">
+                        <RouterLink :to="routesConfig.shop" class="btn">
                             <ButtonView large="true">SHOP NOW</ButtonView>
                         </RouterLink>
                     </div>
@@ -72,7 +73,7 @@ import ButtonView from '@/components/ButtonView.vue';
                                 Do you like them?
                             </p>
                         </div>
-                        <RouterLink to="{routesConfig.shop}" class="btn">
+                        <RouterLink :to="routesConfig.shop" class="btn">
                             <ButtonView large="true">SHOP NOW</ButtonView>
                         </RouterLink>
                     </div>
@@ -93,7 +94,7 @@ import ButtonView from '@/components/ButtonView.vue';
                                 some money of his own
                             </p>
                         </div>
-                        <RouterLink to="{routesConfig.shop}" class="btn">
+                        <RouterLink :to="routesConfig.shop" class="btn">
                             <ButtonView large="true">SHOP NOW</ButtonView>
                         </RouterLink>
                     </div>

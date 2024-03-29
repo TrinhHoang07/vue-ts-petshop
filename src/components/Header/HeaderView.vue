@@ -1,24 +1,24 @@
 <script setup lang="ts">
-    import routesConfig from '@/config/routes';
-    import { RouterLink } from 'vue-router';
-    import NavView from './NavView.vue';
-    import { useSession } from '@/stores';
-    import logo from '@/assets/images/logo-petshop.jpg';
-    import BiSearch from '@/assets/icons/BiSearch.vue';
-    import CartView from './CartView.vue';
+import routesConfig from '@/config/routes';
+import { RouterLink } from 'vue-router';
+import NavView from './NavView.vue';
+import { useSession } from '@/stores';
+import logo from '@/assets/images/logo-petshop.jpg';
+import BiSearch from '@/assets/icons/BiSearch.vue';
+import CartView from './CartView.vue';
 import { ref } from 'vue';
 import SearchView from './SearchView.vue';
+import FaUser from '@/assets/icons/FaUser.vue';
 
-    const {infos} = useSession()
-    const openSearch = ref<boolean>(false)
+const { infos } = useSession();
+const openSearch = ref<boolean>(false);
 
-    const setOpenSearch = (value: boolean) => {
-        openSearch.value = value
-    }
-    const handleOpenSearch = () => {
-        openSearch.value = true
-    }
-
+const setOpenSearch = (value: boolean) => {
+    openSearch.value = value;
+};
+const handleOpenSearch = () => {
+    openSearch.value = true;
+};
 </script>
 
 <template>
@@ -35,10 +35,10 @@ import SearchView from './SearchView.vue';
                 <BiSearch />
             </span>
             <RouterLink class="action-item user-icon" :to="routesConfig.profile">
-                    <div v-if="infos.user && infos.user.avatar" class="user-avatar">
-                        <img :src="infos.user.avatar" alt="avatar user" />
-                    </div>
-                    <!-- <FaUser v-else fontSize={'2.5rem'} /> -->
+                <div v-if="infos.user && infos.user.avatar" class="user-avatar">
+                    <img :src="infos.user.avatar" alt="avatar user" />
+                </div>
+                <FaUser v-else />
             </RouterLink>
             <CartView />
         </div>
@@ -46,5 +46,5 @@ import SearchView from './SearchView.vue';
 </template>
 
 <style lang="scss">
-    @import './Header.scss'
+@import './Header.scss';
 </style>

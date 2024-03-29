@@ -2,17 +2,24 @@
 import routesConfig from '@/config/routes';
 import { useSession } from '@/stores';
 import { onBeforeMount } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+const props = defineProps<{
+    redirect: string;
+}>();
 
-    const route = useRouter();
-    const data = useSession()
+const router = useRouter();
+const route = useRoute();
+const data = useSession();
 
-    onBeforeMount(() => {
-        if(!data.infos.isAuth) {
-            route.push(routesConfig.login)
-        }
-    })
-    
+onBeforeMount(() => {
+    console.log(props.redirect);
+    if (!data.infos.isAuth) {
+        router.push({
+            path: `${routesConfig.login}`,
+            state: props.redirect ? props.redirect : (route.fullPath as any),
+        });
+    }
+});
 </script>
 
 <template>

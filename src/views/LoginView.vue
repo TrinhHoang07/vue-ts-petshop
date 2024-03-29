@@ -2,18 +2,56 @@
 import routesConfig from '@/config/routes';
 import logo from '@/assets/images/logo-petshop.jpg';
 import { useSession } from '@/stores';
-import { onMounted, reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { reactive, ref } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+import { ApiService } from '@/axios/ApiService';
+import type { T_Auth } from '@/model';
+import { useToast } from 'primevue/usetoast';
 
 const { setSessions } = useSession();
+const apiService = new ApiService();
+const route = useRouter();
+const toast = useToast();
 
-onMounted(() => {
-    setSessions(true, {
-        id: 1,
-        name: 'Van Hoang',
-        token: 'eykdhfdsfkjsfhsajfkdshffdg',
-    });
-});
+const handleLogin = () => {
+    apiService.auth
+        .login({
+            username: name.value,
+            password: password.value,
+        })
+        .then((res: T_Auth) => {
+            if (res.message === 'success') {
+                toast.add({
+                    closable: true,
+                    severity: 'success',
+                    life: 3000,
+                    summary: 'Notification',
+                    detail: 'Login successfully!',
+                });
+
+                setSessions(true, {
+                    id: res.data.id,
+                    name: res.data.name,
+                    email: res.data.email,
+                    phone: res.data.phone_number,
+                    token: res.data.access_token,
+                    avatar: res.data.avatar,
+                    gender: res.data.gender,
+                    birthdate: res.data.birth_day,
+                });
+
+                if (route.options.history.state.back) {
+                    route.push(route.options.history.state.back as any);
+                } else {
+                    route.push(routesConfig.home);
+                }
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            errors.both = true;
+        });
+};
 
 const errors = reactive<
     | {
@@ -38,6 +76,7 @@ const handleClearError = (name: string) => {
 
 <template>
     <div class="login">
+        <Toast />
         <div class="contents">
             <div class="logo">
                 <img :src="logo" alt="logo shop" />
@@ -51,7 +90,6 @@ const handleClearError = (name: string) => {
                     @submit="
                         (e) => {
                             e.preventDefault();
-                            // handleSubmit(onSubmit)
                             if (!name.trim()) {
                                 handleError('name');
                             } else {
@@ -63,8 +101,8 @@ const handleClearError = (name: string) => {
                                 handleClearError('password');
                             }
 
-                            if((Object as any).entries(errors).every((item: any) => item[1] === false)) {
-                                console.log('CALL API')
+                            if((Object as any).entries(errors).slice(0, -1).every((item: any) => item[1] === false)) {
+                                handleLogin()
                             }
                         }
                     "
@@ -80,12 +118,6 @@ const handleClearError = (name: string) => {
                             @input="
                                 () => {
                                     handleClearError('name');
-                                    // handleFocus(e.target as HTMLInputElement)
-                                }
-                            "
-                            @blur="
-                                (e) => {
-                                    // handleBlur(e.target)
                                 }
                             "
                         />
@@ -101,12 +133,6 @@ const handleClearError = (name: string) => {
                             @input="
                                 () => {
                                     handleClearError('password');
-                                    // handleFocus(e.target as HTMLInputElement)
-                                }
-                            "
-                            @blur="
-                                () => {
-                                    // => handleBlur(e.target)
                                 }
                             "
                         />

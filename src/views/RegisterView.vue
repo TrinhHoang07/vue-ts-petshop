@@ -1,7 +1,67 @@
 <script setup lang="ts">
 import logo from '@/assets/images/logo-petshop.jpg';
+import { ApiService } from '@/axios/ApiService';
 import routesConfig from '@/config/routes';
+import type { T_Auth } from '@/model';
+import { useSession } from '@/stores';
+import { useToast } from 'primevue/usetoast';
 import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+
+const apiService = new ApiService();
+const { setSessions } = useSession();
+const router = useRouter();
+const toast = useToast();
+
+const hanleRegister = () => {
+    apiService.auth
+        .register({
+            name: name.value,
+            email: email.value,
+            password: password.value,
+            confirm_password: confirmPassword.value,
+        })
+        .then((res: T_Auth) => {
+            if (res.message === 'success') {
+                setSessions(true, {
+                    id: res.data.id,
+                    name: res.data.name,
+                    email: res.data.email,
+                    phone: res.data.phone_number,
+                    token: res.data.access_token,
+                    avatar: res.data.avatar,
+                    gender: res.data.gender,
+                    birthdate: res.data.birth_day,
+                });
+
+                toast.add({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: 'Đăng ký thành công!',
+                    life: 3000,
+                });
+
+                setTimeout(() => {
+                    router.push(routesConfig.home);
+                }, 1500);
+            } else {
+                toast.add({
+                    severity: 'warn',
+                    summary: 'Có lỗi',
+                    detail: res.message,
+                    life: 3000,
+                });
+            }
+        })
+        .catch((_) => {
+            toast.add({
+                severity: 'error',
+                summary: 'Thất bại',
+                detail: 'Có lỗi, vui lòng thử lại!',
+                life: 3000,
+            });
+        });
+};
 
 const errors = reactive<
     | {
@@ -75,6 +135,10 @@ const handleClearError = (name: string) => {
                             } else {
                                 handleClearError('checkpass');
                             }
+
+                            if((Object as any).entries(errors).every((item: any) => item[1] === false)) {
+                                hanleRegister()
+                            }
                         }
                     "
                     class="form-container"
@@ -89,12 +153,6 @@ const handleClearError = (name: string) => {
                             @input="
                                 () => {
                                     handleClearError('name');
-                                    // onInput={(e) => handleFocus(e.target as HTMLInputElement)}
-                                }
-                            "
-                            @blue="
-                                () => {
-                                    // onBlur={(e) => handleBlur(e.target)}
                                 }
                             "
                         />
@@ -110,12 +168,6 @@ const handleClearError = (name: string) => {
                             @input="
                                 () => {
                                     handleClearError('email');
-                                    // onInput={(e) => handleFocus(e.target as HTMLInputElement)}
-                                }
-                            "
-                            @blue="
-                                () => {
-                                    // onBlur={(e) => handleBlur(e.target)}
                                 }
                             "
                         />
@@ -131,12 +183,6 @@ const handleClearError = (name: string) => {
                             @input="
                                 () => {
                                     handleClearError('password');
-                                    // onInput={(e) => handleFocus(e.target as HTMLInputElement)}
-                                }
-                            "
-                            @blue="
-                                () => {
-                                    // onBlur={(e) => handleBlur(e.target)}
                                 }
                             "
                         />
@@ -155,12 +201,6 @@ const handleClearError = (name: string) => {
                             @input="
                                 () => {
                                     handleClearError('confirmPassword');
-                                    // onInput={(e) => handleFocus(e.target as HTMLInputElement)}
-                                }
-                            "
-                            @blue="
-                                () => {
-                                    // onBlur={(e) => handleBlur(e.target)}
                                 }
                             "
                         />

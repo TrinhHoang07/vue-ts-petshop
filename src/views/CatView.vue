@@ -69,7 +69,7 @@ const onPageChange = (page: any) => {
                     >
                         <CardItemFlip
                             :name="item.name"
-                            :to="`/product/dog/${item.id}`"
+                            :to="`/product/cat/${item.id}`"
                             :price="item.price"
                             title="MÈO CẢNH"
                             :src="item.previewUrl"

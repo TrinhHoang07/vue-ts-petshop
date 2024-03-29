@@ -1,5 +1,6 @@
 import { reactive, ref } from 'vue';
 import { defineStore } from 'pinia';
+import type { TData } from '@/model';
 
 type Users = {
     id?: number;
@@ -14,10 +15,8 @@ type Users = {
 
 export const useSession = defineStore('infoUser', () => {
     const infos = reactive<{ isAuth: boolean; user: Users }>({
-        isAuth: true,
-        user: {
-            avatar: 'https://gcs.tripi.vn/public-tripi/tripi-feed/img/474015AhW/anh-gai-xinh-3.jpg',
-        },
+        isAuth: false,
+        user: {},
     });
 
     const setSessions = (isAuth: boolean, data: Users) => {
@@ -83,4 +82,44 @@ export const filterByProduct = defineStore('filterByProduct', () => {
     };
 
     return { isFilterProduct, setIsFilterProduct };
+});
+
+export const useSocket = defineStore('socket', () => {
+    const socketContext = reactive<{
+        socket?: any;
+    }>({});
+
+    const setSocketContext = (socket: any) => {
+        socketContext.socket = socket;
+    };
+
+    return { socketContext, setSocketContext };
+});
+
+export const itemsOrder = defineStore('itemsOrder', () => {
+    const items = reactive<{
+        data: TData[];
+    }>({
+        data: [],
+    });
+
+    const setData = (data: TData[]) => {
+        items.data = data;
+    };
+
+    return { items, setData };
+});
+
+export const isMenuMobile = defineStore('isMenuMobile', () => {
+    const isMenu = reactive<{
+        data: boolean;
+    }>({
+        data: false,
+    });
+
+    const setIsMenu = (data: boolean) => {
+        isMenu.data = data;
+    };
+
+    return { isMenu, setIsMenu };
 });

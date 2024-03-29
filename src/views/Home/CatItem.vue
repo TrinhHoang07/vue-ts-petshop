@@ -6,8 +6,9 @@ import TitleView from '@/components/TitleView.vue';
 import CardItemZoomInLeft from '@/components/CardItemZoomInLeft.vue';
 import routesConfig from '@/config/routes';
 import ButtonView from '@/components/ButtonView.vue';
+import { useDataInHome } from '@/hooks/useDataInHome';
 
-const data = reactive<any[]>([1, 2, 3, 4, 5, 6, 7, 8]);
+const { values } = useDataInHome('products/products/home?type=cat');
 </script>
 
 <template>
@@ -15,13 +16,13 @@ const data = reactive<any[]>([1, 2, 3, 4, 5, 6, 7, 8]);
         <TitleView :logo="logo" title="Mèo Cảnh" />
         <div class="list-cards">
             <CardItemZoomInLeft
-                v-for="item in data"
-                :key="item"
-                to=""
+                v-for="item in values.data"
+                :key="item.id"
+                :to="`product/cat/${item.id}`"
                 title="MÈO CẢNH"
-                name="Meo cute hot me"
-                :src="img"
-                :price="1000000"
+                :name="item.name"
+                :src="item.previewUrl"
+                :price="item.price"
             />
         </div>
         <div class="btn-more">

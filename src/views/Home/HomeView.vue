@@ -10,11 +10,19 @@ import FoodItem from './FoodItem.vue';
 import UseFul from './UseFul.vue';
 import { onMounted } from 'vue';
 
+import { socketContext } from '@/context/SocketContext';
+
 onMounted(() => {
     document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
     window.scrollTo({
         behavior: 'smooth',
         top: 0,
+    });
+});
+
+onMounted(() => {
+    socketContext.on('connect', () => {
+        console.log(socketContext.id);
     });
 });
 </script>

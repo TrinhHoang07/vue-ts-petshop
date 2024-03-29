@@ -8,6 +8,7 @@ import useDebouncedRef from '@/hooks/useDebounce';
 import { App } from '@/const/App';
 import { ApiService } from '@/axios/ApiService';
 import type { T_Search } from '@/model';
+import { formatVND } from '@/Helper';
 
 const props = defineProps<{
     open: boolean;
@@ -102,13 +103,13 @@ const handleSearch = (e: any) => {
                         :key="item.id"
                         class="result-item"
                     >
-                        <div class="item-info">
+                        <div class="item-info-sss">
                             <div class="preview">
                                 <img :src="item.preview_url" alt="images preview" />
                             </div>
                             <p class="name-item">{{ item.name }}</p>
                         </div>
-                        <p class="price-item">{{ item.price }}</p>
+                        <p class="price-item">{{ formatVND.format(item.price) }}</p>
                     </RouterLink>
                 </template>
                 <p v-else class="message-noti">{{ message }}</p>
@@ -216,7 +217,7 @@ const handleSearch = (e: any) => {
     font-size: 1.4rem;
 }
 
-.item-info {
+.item-info-sss {
     display: flex;
     align-items: center;
 }

@@ -72,7 +72,7 @@ const onPageChange = (page: any) => {
                     >
                         <CardItemZoomIn
                             :name="item.name"
-                            :to="`/product/dog/${item.id}`"
+                            :to="`/product/accessory/${item.id}`"
                             :price="item.price"
                             title="PHỤ KIỆN"
                             :src="item.previewUrl"
