@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import HiMenu from '@/assets/icons/HiMenu.vue';
 import { ApiService } from '@/axios/ApiService';
 import PrivateRoute from '@/components/PrivateRoute.vue';
 import routesConfig from '@/config/routes';
 import { App } from '@/const/App';
+import LayoutProfile from '@/layout/LayoutProfile.vue';
 import type { T_CustomerUpdate } from '@/model';
-import { useSession } from '@/stores';
+import { isMenuMobile, useSession } from '@/stores';
 import axios from 'axios';
 import Dropdown from 'primevue/dropdown';
 import { useToast } from 'primevue/usetoast';
@@ -33,6 +35,7 @@ const data = reactive<{
     data: {},
 });
 const { infos, setSessions } = useSession();
+const { setIsMenu } = isMenuMobile();
 const imageAvatar = ref<string>('');
 const apiService = new ApiService();
 const toast = useToast();
@@ -128,7 +131,7 @@ onMounted(() => {
     });
 });
 
-watch(infos, () => {
+onMounted(() => {
     if (infos.user) {
         data.data = {
             day: {
@@ -243,187 +246,180 @@ const handleSubmit = () => {
 
 <template>
     <PrivateRoute :redirect="routesConfig.profile">
-        <div class="profile">
-            <div class="header-profile">
-                <h3 class="title">
-                    <div class="profile-into-back">
-                        <span
-                            @click="
-                                () => {
-                                    //     onClick={() => {
-                                    //     setState(true);
-                                    // }}
-                                }
-                            "
-                            class="back-btn-profile"
-                        >
-                            <HiMenu />
-                        </span>
-                        <span>Hồ Sơ Của Tôi</span>
-                    </div>
-                </h3>
-                <p class="sub-title">Quản lý thông tin hồ sơ để bảo mật tài khoản của bạn</p>
-            </div>
-            <div class="contents">
-                <div class="form-profile">
-                    <form class="form-container">
-                        <div class="form-item">
-                            <label htmlFor="name">Tên đăng nhập</label>
-                            <input
-                                @change="(e: any) => {
+        <LayoutProfile :temporary-image="imageAvatar">
+            <div class="profile">
+                <div class="header-profile">
+                    <h3 class="title">
+                        <div class="profile-into-back">
+                            <span @click="setIsMenu(true)" class="back-btn-profile">
+                                <HiMenu />
+                            </span>
+                            <span>Hồ Sơ Của Tôi</span>
+                        </div>
+                    </h3>
+                    <p class="sub-title">Quản lý thông tin hồ sơ để bảo mật tài khoản của bạn</p>
+                </div>
+                <div class="contents">
+                    <div class="form-profile">
+                        <form class="form-container">
+                            <div class="form-item">
+                                <label htmlFor="name">Tên đăng nhập</label>
+                                <input
+                                    @change="(e: any) => {
                                         data.data = {
                                             ...data.data,
                                             name: e.target.value,
                                         }
                                     }"
-                                :value="data.data?.name ?? ''"
-                                type="text"
-                                id="name"
-                                placeholder="Aa..."
-                            />
-                        </div>
-                        <div class="form-item">
-                            <label htmlFor="mail">Email</label>
-                            <input
-                                @change="(e: any) => {
+                                    :value="data.data?.name ?? ''"
+                                    type="text"
+                                    id="name"
+                                    placeholder="Aa..."
+                                />
+                            </div>
+                            <div class="form-item">
+                                <label htmlFor="mail">Email</label>
+                                <input
+                                    @change="(e: any) => {
                                         data.data = {
                                             ...data.data,
                                             email: e.target.value,
                                         }
                                     }"
-                                :value="data.data?.email ?? ''"
-                                type="text"
-                                id="mail"
-                                placeholder="Aa..."
-                            />
-                        </div>
-                        <div class="form-item">
-                            <label htmlFor="phone">Số điện thoại</label>
-                            <input
-                                @change="(e: any) => {
+                                    :value="data.data?.email ?? ''"
+                                    type="text"
+                                    id="mail"
+                                    placeholder="Aa..."
+                                />
+                            </div>
+                            <div class="form-item">
+                                <label htmlFor="phone">Số điện thoại</label>
+                                <input
+                                    @change="(e: any) => {
                                         data.data = {
                                             ...data.data,
                                             phoneNumber: e.target.value,
                                         }
                                     }"
-                                :value="data.data?.phoneNumber ?? ''"
-                                type="text"
-                                id="phone"
-                                placeholder="Aa..."
-                            />
-                        </div>
-                        <div class="form-item">
-                            <span>Giới tính</span>
-                            <div class="gender-container">
-                                <div class="gender-item">
-                                    <input
-                                        :checked="data.data?.gender?.toLocaleLowerCase() === 'male'"
-                                        @change="(e: any) => {
+                                    :value="data.data?.phoneNumber ?? ''"
+                                    type="text"
+                                    id="phone"
+                                    placeholder="Aa..."
+                                />
+                            </div>
+                            <div class="form-item">
+                                <span>Giới tính</span>
+                                <div class="gender-container">
+                                    <div class="gender-item">
+                                        <input
+                                            :checked="data.data?.gender?.toLocaleLowerCase() === 'male'"
+                                            @change="(e: any) => {
                                         data.data = {
                                             ...data.data,
                                             gender: e.target.value,
                                         }
                                     }"
-                                        type="radio"
-                                        value="male"
-                                        id="male"
-                                        name="gender"
-                                    />
-                                    <label htmlFor="male">Nam</label>
-                                </div>
-                                <div class="gender-item">
-                                    <input
-                                        :checked="data?.data.gender?.toLowerCase() === 'female'"
-                                        @change="(e: any) => {
+                                            type="radio"
+                                            value="male"
+                                            id="male"
+                                            name="gender"
+                                        />
+                                        <label htmlFor="male">Nam</label>
+                                    </div>
+                                    <div class="gender-item">
+                                        <input
+                                            :checked="data?.data.gender?.toLowerCase() === 'female'"
+                                            @change="(e: any) => {
                                         data.data = {
                                             ...data.data,
                                             gender: e.target.value,
                                         }
                                     }"
-                                        value="female"
-                                        type="radio"
-                                        id="female"
-                                        name="gender"
-                                    />
-                                    <label htmlFor="female">Nữ</label>
-                                </div>
-                                <div class="gender-item">
-                                    <input
-                                        :checked="data?.data.gender?.toLowerCase() === 'other'"
-                                        @change="(e: any) => {
+                                            value="female"
+                                            type="radio"
+                                            id="female"
+                                            name="gender"
+                                        />
+                                        <label htmlFor="female">Nữ</label>
+                                    </div>
+                                    <div class="gender-item">
+                                        <input
+                                            :checked="data?.data.gender?.toLowerCase() === 'other'"
+                                            @change="(e: any) => {
                                         data.data = {
                                             ...data.data,
                                             gender: e.target.value,
                                         }
                                     }"
-                                        value="other"
-                                        type="radio"
-                                        id="other"
-                                        name="gender"
-                                    />
-                                    <label htmlFor="other">Khác</label>
+                                            value="other"
+                                            type="radio"
+                                            id="other"
+                                            name="gender"
+                                        />
+                                        <label htmlFor="other">Khác</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-item">
-                            <span>Ngày sinh</span>
-                            <div class="birth-container">
-                                <div class="birth-item">
-                                    <Dropdown
-                                        :value="data?.data.day"
-                                        @change="(e: any) => {
+                            <div class="form-item">
+                                <span>Ngày sinh</span>
+                                <div class="birth-container">
+                                    <div class="birth-item">
+                                        <Dropdown
+                                            :modelValue="data?.data.day"
+                                            @change="(e: any) => {
                                         data.data = {
                                             ...data.data,
-                                            day: e.target.value,
+                                            day: e.value,
                                         }
                                     }"
-                                        :options="days"
-                                        optionLabel="day"
-                                        placeholder="Ngày"
-                                        class="ll md:w-14rem"
-                                    />
-                                </div>
-                                <div class="birth-item">
-                                    <Dropdown
-                                        :value="data?.data.month"
-                                        @change="(e: any) => {
+                                            :options="days"
+                                            optionLabel="day"
+                                            placeholder="Ngày"
+                                            class="ll md:w-14rem"
+                                        />
+                                    </div>
+                                    <div class="birth-item">
+                                        <Dropdown
+                                            :modelValue="data?.data.month"
+                                            @change="(e: any) => {
+                                                console.log(e)
                                         data.data = {
                                             ...data.data,
-                                            month: e.target.value,
+                                            month: e.value,
                                         }
                                     }"
-                                        :options="months"
-                                        optionLabel="month"
-                                        placeholder="Tháng"
-                                        class="ll md:w-14rem"
-                                    />
-                                </div>
-                                <div class="birth-item">
-                                    <Dropdown
-                                        :value="data?.data.year"
-                                        @change="(e: any) => {
+                                            :options="months"
+                                            optionLabel="month"
+                                            placeholder="Tháng"
+                                            class="ll md:w-14rem"
+                                        />
+                                    </div>
+                                    <div class="birth-item">
+                                        <Dropdown
+                                            :modelValue="data?.data.year"
+                                            @change="(e: any) => {
                                         data.data = {
                                             ...data.data,
-                                            year: e.target.value,
+                                            year: e.value,
                                         }
                                     }"
-                                        :options="years"
-                                        optionLabel="year"
-                                        placeholder="Năm"
-                                        class="ll md:w-14rem"
-                                    />
+                                            :options="years"
+                                            optionLabel="year"
+                                            placeholder="Năm"
+                                            class="ll md:w-14rem"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="btn-save">
-                            <button @click="handleSubmit" type="button">Lưu</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="preview-avatar">
-                    <div class="prev-avatar">
-                        <img
-                            :src="
+                            <div class="btn-save">
+                                <button @click="handleSubmit" type="button">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="preview-avatar">
+                        <div class="prev-avatar">
+                            <img
+                                :src="
                                     imageAvatar.length > 0
                                         ? imageAvatar
                                         : infos.user &&
@@ -432,20 +428,21 @@ const handleSubmit = () => {
                                         ? infos.user?.avatar
                                         : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
                                 "
-                            alt="prev view avatar"
-                        />
-                    </div>
-                    <div class="change-avatar">
-                        <label htmlFor="choose">Chọn Ảnh</label>
-                        <input @change="handleUpdateAvatar" type="file" id="choose" />
-                    </div>
-                    <div class="alert">
-                        <p>Dụng lượng file tối đa 1 MB</p>
-                        <p>Định dạng:.JPEG, .PNG</p>
+                                alt="prev view avatar"
+                            />
+                        </div>
+                        <div class="change-avatar">
+                            <label htmlFor="choose">Chọn Ảnh</label>
+                            <input @change="handleUpdateAvatar" type="file" id="choose" />
+                        </div>
+                        <div class="alert">
+                            <p>Dụng lượng file tối đa 1 MB</p>
+                            <p>Định dạng:.JPEG, .PNG</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </LayoutProfile>
     </PrivateRoute>
 </template>
 

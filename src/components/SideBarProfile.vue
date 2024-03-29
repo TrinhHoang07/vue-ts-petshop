@@ -2,6 +2,12 @@
 import { useSession } from '@/stores';
 import routesConfig from '@/config/routes';
 import { RouterLink, useRoute } from 'vue-router';
+import FaUser from '@/assets/icons/FaUser.vue';
+import UserFriends from '@/assets/icons/UserFriends.vue';
+import MessageCir from '@/assets/icons/MessageCir.vue';
+import CirList from '@/assets/icons/CirList.vue';
+import Notifications from '@/assets/icons/Notifications.vue';
+import Discount from '@/assets/icons/Discount.vue';
 const props = defineProps<{
     temporaryImage: string;
 }>();
@@ -36,7 +42,7 @@ const route = useRoute();
         <div class="options">
             <div class="private-info">
                 <RouterLink :to="routesConfig.profile" class="title-info-private">
-                    <!-- <AiOutlineUser size={'2rem'} style={{ color: '#3067be' }} /> -->
+                    <FaUser />
                     <span>Tài khoản của tôi</span>
                 </RouterLink>
                 <RouterLink
@@ -74,7 +80,7 @@ const route = useRoute();
                     class="title-info-private"
                     :class="{ active: routesConfig.profile_friends === route.fullPath }"
                 >
-                    <!-- <FaUserFriends size={'2rem'} style={{ color: 'dodgerblue' }} /> -->
+                    <UserFriends />
                     <span>Bạn bè</span>
                 </RouterLink>
                 <RouterLink
@@ -82,7 +88,7 @@ const route = useRoute();
                     class="title-info-private"
                     :class="{ active: routesConfig.profile_chats === route.fullPath }"
                 >
-                    <!-- <TbMessageCircle2 size={'2rem'} style={{ color: 'dodgerblue' }} /> -->
+                    <MessageCir />
                     <span>Tin nhắn</span>
                 </RouterLink>
                 <RouterLink
@@ -90,7 +96,7 @@ const route = useRoute();
                     class="title-info-private"
                     :class="{ active: routesConfig.profile_buy === route.fullPath }"
                 >
-                    <!-- <CiViewList size={'2rem'} style={{ color: '#3067be' }} /> -->
+                    <CirList />
                     <span>Đơn Mua</span>
                 </RouterLink>
                 <RouterLink
@@ -98,7 +104,7 @@ const route = useRoute();
                     class="title-info-private"
                     :class="{ active: routesConfig.profile_noti === route.fullPath }"
                 >
-                    <!-- <IoMdNotificationsOutline style={{ color: '#f46b4e' }} size={'2rem'} /> -->
+                    <Notifications />
                     <span>Thông Báo</span>
                 </RouterLink>
                 <RouterLink
@@ -106,7 +112,7 @@ const route = useRoute();
                     class="title-info-private"
                     :class="{ active: routesConfig.profile_voucher === route.fullPath }"
                 >
-                    <!-- <MdOutlineDiscount size={'2rem'} style={{ color: 'orange' }} /> -->
+                    <Discount />
                     <span>Petshop Vouchers</span>
                 </RouterLink>
             </div>

@@ -1,4 +1,11 @@
 <script lang="ts" setup>
+import CirList from '@/assets/icons/CirList.vue';
+import Discount from '@/assets/icons/Discount.vue';
+import FaUser from '@/assets/icons/FaUser.vue';
+import IoClose from '@/assets/icons/IoClose.vue';
+import MessageCir from '@/assets/icons/MessageCir.vue';
+import Notifications from '@/assets/icons/Notifications.vue';
+import UserFriends from '@/assets/icons/UserFriends.vue';
 import routesConfig from '@/config/routes';
 import { isMenuMobile } from '@/stores';
 import { RouterLink } from 'vue-router';
@@ -10,7 +17,7 @@ const { isMenu, setIsMenu } = isMenuMobile();
     <div
         :style="{
             position: 'fixed',
-            top: 72,
+            top: '72px',
             left: 0,
             bottom: 0,
             backgroundColor: '#f2f3f5',
@@ -22,11 +29,7 @@ const { isMenu, setIsMenu } = isMenuMobile();
         <div class="navbar-phone-profile">
             <div>
                 <span
-                    @click="
-                        () => {
-                            // onClick={() => setState(false)}
-                        }
-                    "
+                    @click="setIsMenu(false)"
                     :style="{
                         display: 'flex',
                         justifyContent: 'flex-end',
@@ -36,140 +39,136 @@ const { isMenu, setIsMenu } = isMenuMobile();
                         cursor: 'pointer',
                     }"
                 >
-                    <!-- <IoClose size={'2rem'} /> -->
+                    <IoClose />
                 </span>
             </div>
             <div class="options">
                 <div class="private-info">
-                    <RouterLink
-                        @click="
-                            () => {
-                                // onClick={() => setState(false)}
-                            }
-                        "
-                        :to="routesConfig.profile"
-                        class="title-info-private"
-                    >
-                        <!-- <AiOutlineUser size={'2rem'} style={{ color: '#3067be' }} /> -->
+                    <RouterLink @click="setIsMenu(false)" :to="routesConfig.profile" class="title-info-private">
+                        <FaUser />
                         <span>Tài khoản của tôi</span>
                     </RouterLink>
-                    <NavLink
-                        @click="
-                            () => {
-                                // onClick={() => setState(false)}
-                            }
-                        "
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         class="child-not-icon"
                         :class="{ active: '' }"
                         :to="routesConfig.profile"
                     >
                         Hồ Sơ
-                    </NavLink>
-                    <NavLink
-                        @click="
-                            () => {
-                                // onClick={() => setState(false)}
-                            }
-                        "
+                    </RouterLink>
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         class="child-not-icon"
                         :class="{ active: '' }"
                         :to="routesConfig.profile_bank"
                     >
                         Ngân Hàng
-                    </NavLink>
-                    <NavLink
-                        @click="
-                            () => {
-                                // onClick={() => setState(false)}
-                            }
-                        "
+                    </RouterLink>
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         class="child-not-icon"
                         :class="{ active: '' }"
                         :to="routesConfig.profile_address"
                     >
                         Địa Chỉ
-                    </NavLink>
-                    <NavLink
-                        @click="
-                            () => {
-                                // onClick={() => setState(false)}
-                            }
-                        "
+                    </RouterLink>
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         class="child-not-icon"
                         :class="{ active: '' }"
                         :to="routesConfig.profile_change_password"
                     >
                         Đổi Mật Khẩu
-                    </NavLink>
+                    </RouterLink>
                 </div>
                 <div class="more-actions">
-                    <NavLink
-                        @click="
-                            () => {
-                                // onClick={() => setState(false)}
-                            }
-                        "
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         :to="routesConfig.profile_friends"
                         class="title-info-private"
                         :class="{ active: '' }"
                     >
-                        <!-- <FaUserFriends size={'2rem'} style={{ color: 'dodgerblue' }} /> -->
+                        <UserFriends />
                         <span>Bạn bè</span>
-                    </NavLink>
-                    <NavLink
-                        @click="
-                            () => {
-                                /* onClick={() => setState(false)} */
-                            }
-                        "
+                    </RouterLink>
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         :to="routesConfig.profile_chats"
                         class="title-info-private"
                         :class="{ active: '' }"
                     >
-                        <!-- <TbMessageCircle2 size={'2rem'} style={{ color: 'dodgerblue' }} /> -->
+                        <MessageCir />
                         <span>Tin nhắn</span>
-                    </NavLink>
-                    <NavLink
-                        @click="
-                            () => {
-                                /* onClick={() => setState(false)} */
-                            }
-                        "
+                    </RouterLink>
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         :to="routesConfig.profile_buy"
                         class="title-info-private"
                         :class="{ active: '' }"
                     >
-                        <!-- <CiViewList size={'2rem'} style={{ color: '#3067be' }} /> -->
+                        <CirList />
                         <span>Đơn Mua</span>
-                    </NavLink>
-                    <NavLink
-                        @click="
-                            () => {
-                                /* onClick={() => setState(false)} */
-                            }
-                        "
+                    </RouterLink>
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         :to="routesConfig.profile_noti"
                         class="title-info-private"
                         :class="{ active: '' }"
                     >
-                        <!-- <IoMdNotificationsOutline style={{ color: '#f46b4e' }} size={'2rem'} /> -->
+                        <Notifications />
                         <span>Thông Báo</span>
-                    </NavLink>
-                    <NavLink
-                        @click="
-                            () => {
-                                // onClick={() => setState(false)}
-                            }
-                        "
+                    </RouterLink>
+                    <RouterLink
+                        @click="setIsMenu(false)"
                         :to="routesConfig.profile_voucher"
                         class="title-info-private"
                         :class="{ active: '' }"
                     >
-                        <!-- <MdOutlineDiscount size={'2rem'} style={{ color: 'orange' }} /> -->
+                        <Discount />
                         <span>Petshop Vouchers</span>
-                    </NavLink>
+                    </RouterLink>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<style lang="scss">
+.navbar-phone-profile {
+    padding: 0 32px;
+    .options {
+        padding-top: 8px;
+        a {
+            text-decoration: none;
+            display: flex;
+            margin: 10px 0;
+            align-items: center;
+            color: #333;
+
+            span {
+                margin-left: 6px;
+                transition: all linear 0.25s;
+                &:hover {
+                    color: orange;
+                }
+            }
+        }
+
+        .child-not-icon {
+            margin-left: 26px;
+            transition: all linear 0.25s;
+            &:hover {
+                color: orange;
+            }
+        }
+    }
+
+    .title-info-private.active {
+        color: orange;
+    }
+
+    .child-not-icon.active {
+        color: orange;
+    }
+}
+</style>
