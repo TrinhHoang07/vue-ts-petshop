@@ -34,6 +34,6 @@
 svg {
     width: 24px;
     height: 24px;
-    color: '#3067be';
+    color: var(--text-color);
 }
 </style>

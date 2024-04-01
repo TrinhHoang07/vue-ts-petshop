@@ -447,5 +447,5 @@ const handleSubmit = () => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/sass/Profile.scss';
+@import '@/assets/sass/Profile.module.scss';
 </style>

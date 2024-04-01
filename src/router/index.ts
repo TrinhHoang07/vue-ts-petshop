@@ -18,6 +18,15 @@ import NotFound from '@/views/NotFound.vue';
 import ShopView from '@/views/ShopView.vue';
 import DetailProduct from '@/views/DetailProduct.vue';
 import Categories from '@/views/Categories.vue';
+import ProfileChangePassword from '@/views/ProfileChangePassword.vue';
+import ProfileChat from '@/views/ProfileChat.vue';
+import ProfileBank from '@/views/ProfileBank.vue';
+import ProfileBuys from '@/views/ProfileBuys.vue';
+import ProfileVoucher from '@/views/ProfileVoucher.vue';
+import ProfileAddress from '@/views/ProfileAddress.vue';
+import ProfileNoti from '@/views/ProfileNoti.vue';
+import ProfileFriends from '@/views/ProfileFriends.vue';
+import ProfileUser from '@/views/ProfileUser.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -91,6 +100,52 @@ const router = createRouter({
                     component: Categories,
                     name: 'categories',
                     path: routesConfig.categories,
+                },
+                //
+                {
+                    component: ProfileChangePassword,
+                    name: 'profile-change-password',
+                    path: routesConfig.profile_change_password,
+                },
+                {
+                    component: ProfileChat,
+                    name: 'profile-chat',
+                    path: routesConfig.profile_chats,
+                },
+                {
+                    component: ProfileBank,
+                    name: 'profile-bank',
+                    path: routesConfig.profile_bank,
+                },
+                {
+                    component: ProfileBuys,
+                    name: 'profile-buys',
+                    path: routesConfig.profile_buy,
+                },
+                {
+                    component: ProfileVoucher,
+                    name: 'profile-voucher',
+                    path: routesConfig.profile_voucher,
+                },
+                {
+                    component: ProfileAddress,
+                    name: 'profile-address',
+                    path: routesConfig.profile_address,
+                },
+                {
+                    component: ProfileNoti,
+                    name: 'profile-noti',
+                    path: routesConfig.profile_noti,
+                },
+                {
+                    component: ProfileFriends,
+                    name: 'profile-friends',
+                    path: routesConfig.profile_friends,
+                },
+                {
+                    component: ProfileUser,
+                    name: 'profile-user',
+                    path: routesConfig.profile_user,
                 },
             ],
         },

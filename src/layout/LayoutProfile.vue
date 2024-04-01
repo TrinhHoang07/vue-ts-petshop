@@ -3,7 +3,7 @@ import MenuPhoneProfile from '@/components/MenuPhoneProfile.vue';
 import SideBarProfile from '@/components/SideBarProfile.vue';
 
 const props = defineProps<{
-    temporaryImage: string;
+    temporaryImage?: string;
 }>();
 </script>
 
@@ -12,7 +12,7 @@ const props = defineProps<{
         <MenuPhoneProfile />
         <div class="contents">
             <div class="nav-bar">
-                <SideBarProfile :temporaryImage="props.temporaryImage" />
+                <SideBarProfile :temporaryImage="props.temporaryImage ?? ''" />
             </div>
             <div class="detail">
                 <div class="detail-wrapper">
