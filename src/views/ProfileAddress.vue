@@ -6,7 +6,7 @@ import routesConfig from '@/config/routes';
 import LayoutProfile from '@/layout/LayoutProfile.vue';
 import { useToast } from 'primevue/usetoast';
 import { ref, reactive, onMounted } from 'vue';
-import { socketContext } from '@/context/SocketContext';
+import { socketContext, stateEvents } from '@/context/SocketContext';
 import { isMenuMobile, useSession } from '@/stores';
 import type { Address, T_ProfileAddress } from '@/model';
 import { useConfirm } from 'primevue/useconfirm';
@@ -25,11 +25,7 @@ const dataAddress = reactive<{
 }>({
     data: {},
 });
-const addresses = reactive<{
-    data: Address[];
-}>({
-    data: [],
-});
+const addresses = ref<Address[]>([]);
 
 onMounted(() => {
     if (infos.isAuth) {
@@ -37,7 +33,7 @@ onMounted(() => {
             .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
             .then((res: T_ProfileAddress) => {
                 if (res.message === 'success') {
-                    addresses.data = res.data;
+                    addresses.value = [...res.data];
                 }
             })
             .catch((err) => console.error(err));
@@ -45,39 +41,35 @@ onMounted(() => {
 });
 
 onMounted(() => {
-    if (socketContext) {
-        socketContext.on('connect', () => {
-            socketContext?.on('create-address-give', (_) => {
-                console.log('listening on ' + socketContext);
-                if (infos.isAuth) {
-                    apiService.address
-                        .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
-                        .then((res: T_ProfileAddress) => {
-                            if (res.message === 'success') {
-                                console.log('addresses' + res.data.length);
-                                addresses.data = res.data;
-                            }
-                        })
-                        .catch((err) => console.error(err));
-                }
-            });
-
-            socketContext?.on('update-address-give', (_) => {
-                if (infos.isAuth) {
-                    apiService.address
-                        .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
-                        .then((res: T_ProfileAddress) => {
-                            if (res.message === 'success') {
-                                addresses.data = res.data;
-                            }
-                        })
-                        .catch((err) => console.error(err));
-                }
-            });
+    if (stateEvents.connected) {
+        socketContext?.on('create-address-give', (_) => {
+            if (infos.isAuth) {
+                console.log('listening add ' + socketContext);
+                apiService.address
+                    .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
+                    .then((res: T_ProfileAddress) => {
+                        if (res.message === 'success') {
+                            console.log('addresses' + res.data.length);
+                            addresses.value = [...res.data];
+                        }
+                    })
+                    .catch((err) => console.error(err));
+            }
         });
 
-        socketContext.on('disconnect', () => {
-            console.log('id disconnected: ', socketContext?.id);
+        socketContext?.on('update-address-give', (_) => {
+            if (infos.isAuth) {
+                console.log('listening update ' + socketContext);
+                apiService.address
+                    .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
+                    .then((res: T_ProfileAddress) => {
+                        if (res.message === 'success') {
+                            console.log('addresses' + res.data);
+                            addresses.value = [...res.data];
+                        }
+                    })
+                    .catch((err) => console.error(err));
+            }
         });
     }
 });
@@ -106,7 +98,7 @@ const confirmHandle = (value: string) => {
                             .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
                             .then((res: T_ProfileAddress) => {
                                 if (res.message === 'success') {
-                                    addresses.data = res.data;
+                                    addresses.value = res.data;
                                 }
                             })
                             .catch((err) => console.error(err));
@@ -180,12 +172,12 @@ const setTypeAction = (data: string) => {
                         </p>
                     </div>
                     <div class="contents">
-                        <div v-if="addresses.data.length > 0" class="address-item">
+                        <div v-if="addresses.length > 0" class="address-item">
                             <h5>Địa chỉ</h5>
-                            <div v-for="item in addresses.data" class="wrapper-item-addr" :key="item.id">
+                            <div v-for="item in addresses" class="wrapper-item-addr" :key="item.id">
                                 <div class="infos">
                                     <h3>
-                                        {{ item.full_name }} | <span>(+84) {{ item.phone_number.slice(1) }}</span>
+                                        {{ item.full_name }} | <span>(+84) {{ item.phone_number?.slice(1) }}</span>
                                     </h3>
                                     <p>{{ item.detail_address }}</p>
                                     <p>{{ item.main_address }}</p>

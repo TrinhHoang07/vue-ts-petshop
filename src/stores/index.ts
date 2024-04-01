@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue';
 import { defineStore } from 'pinia';
-import type { TData } from '@/model';
+import type { TData, TProfileUser } from '@/model';
 
 type Users = {
     id?: number;
@@ -122,4 +122,25 @@ export const isMenuMobile = defineStore('isMenuMobile', () => {
     };
 
     return { isMenu, setIsMenu };
+});
+
+export const dataProfile = defineStore('dataProfile', () => {
+    const data = reactive<{
+        data: TProfileUser;
+    }>({
+        data: {
+            id: 0,
+            userName: 'Trịnh Văn Hoàng',
+            avatarPath: 'https://dogstar.vn/wp-content/uploads/2022/05/hinh-nen-meo-3d-1.jpg',
+            gender: 'Male',
+            address: 'Nhổn - Bắc Từ Liêm - Hà Nội',
+            isFriend: false,
+        },
+    });
+
+    const setDataProfile = (val: TProfileUser) => {
+        data.data = val;
+    };
+
+    return { data, setDataProfile };
 });

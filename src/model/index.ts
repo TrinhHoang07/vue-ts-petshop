@@ -235,12 +235,12 @@ export type T_Message = {
 // Profile address
 export type Address = {
     id: number;
-    full_name: string;
-    customer_id: number;
-    phone_number: string;
-    main_address: string;
-    detail_address: string;
-    type: string;
+    full_name?: string;
+    customer_id?: number;
+    phone_number?: string;
+    main_address?: string;
+    detail_address?: string;
+    type?: string;
 };
 
 export type T_ProfileAddress = {

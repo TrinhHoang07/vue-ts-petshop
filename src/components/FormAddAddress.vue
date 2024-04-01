@@ -68,6 +68,8 @@ watch(props.data, () => {
 
 const handleSubmit = () => {
     if (props.type === 'add') {
+        console.log('add...');
+
         const dataPost: TPostCreateAddress = {
             full_name: name.value,
             customer_id: infos.user?.id ?? 0,
@@ -106,7 +108,7 @@ const handleSubmit = () => {
     } else if (props.type === 'update') {
         const dataPost: TPostUpdateAddress = {
             full_name: name.value,
-            id: props.data?.id ?? 0,
+            id: props.data.data?.id,
             phone_number: phone.value,
             main_address: cityDetail.value,
             detail_address: detail.value,
@@ -115,6 +117,7 @@ const handleSubmit = () => {
         apiService.address
             .updateAddressById(infos.user?.id?.toString() ?? '', dataPost, infos.user?.token ?? '')
             .then((res) => {
+                console.log(res);
                 if (res.message === 'success') {
                     handleCloseForm();
 
@@ -128,6 +131,13 @@ const handleSubmit = () => {
                     socketContext.emit('update-address', {
                         id: infos.user?.id,
                         status: 'success',
+                    });
+                } else {
+                    toast.add({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Xảy ra lỗi!!!',
+                        life: 3000,
                     });
                 }
             })
