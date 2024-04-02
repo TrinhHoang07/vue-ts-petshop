@@ -118,6 +118,7 @@ const handleSubmit = () => {
         });
         value.value = '';
         inputRef.value && inputRef.value.focus();
+        scrollToBottom();
     }
 };
 
@@ -131,6 +132,13 @@ const handleEnter = (e: any) => {
 watch(value, () => {
     console.log('value change: ', value.value);
 });
+
+watch([open, messages], () => {
+    setTimeout(() => {
+        scrollToBottom();
+        inputRef.value?.focus();
+    }, 500);
+});
 </script>
 
 <template>
@@ -139,7 +147,6 @@ watch(value, () => {
             @click="
                 () => {
                     open = true;
-                    scrollToBottom();
                 }
             "
             class="container"
@@ -213,7 +220,7 @@ watch(value, () => {
                     <p class="content-message-2">{message.message}</p>
                 </div>
                 ); } })} -->
-                <div :ref="lassMessageRef"></div>
+                <div ref="lassMessageRef"></div>
             </div>
             <div class="footer-chat">
                 <TypeAdmin v-if="visible" />
@@ -225,7 +232,7 @@ watch(value, () => {
                         <span class="icons mr-6">
                             <BiHappy />
                         </span>
-                        <input @keydown="handleEnter" :ref="inputRef" v-model="value" placeholder="Aa..." />
+                        <input @keydown="handleEnter" ref="inputRef" v-model="value" placeholder="Aa..." />
                     </div>
                     <IoSend />
                 </div>

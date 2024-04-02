@@ -84,9 +84,9 @@ const route = useRoute();
                     <span>Bạn bè</span>
                 </RouterLink>
                 <RouterLink
-                    :to="routesConfig.profile_chats"
+                    :to="routesConfig.profile_chat"
                     class="title-info-private"
-                    :class="{ active: routesConfig.profile_chats === route.fullPath }"
+                    :class="{ active: routesConfig.profile_chat === route.fullPath }"
                 >
                     <MessageCir />
                     <span>Tin nhắn</span>

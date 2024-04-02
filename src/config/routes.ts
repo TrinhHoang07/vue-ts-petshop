@@ -6,6 +6,7 @@ const routesConfig = {
     profile_address: '/profile/address',
     profile_friends: '/profile/friends',
     profile_chats: '/profile/chats/:id?',
+    profile_chat: '/profile/chats',
     profile_change_password: '/profile/change_password',
     profile_buy: '/profile/buys',
     profile_noti: '/profile/notifycation',

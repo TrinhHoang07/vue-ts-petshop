@@ -93,7 +93,7 @@ const { isMenu, setIsMenu } = isMenuMobile();
                     </RouterLink>
                     <RouterLink
                         @click="setIsMenu(false)"
-                        :to="routesConfig.profile_chats"
+                        :to="routesConfig.profile_chat"
                         class="title-info-private"
                         :class="{ active: '' }"
                     >
