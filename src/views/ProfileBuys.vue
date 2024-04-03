@@ -36,7 +36,7 @@ onMounted(() => {
 
 <template>
     <PrivateRoute :redirect="routesConfig.profile">
-        <LayoutProfile :temporary-image="''">
+        <LayoutProfile>
             <div class="profile-buys">
                 <div>
                     <span @click="() => setIsMenu(true)" class="back-btn-profile">

@@ -22,6 +22,7 @@ const routesConfig = {
     food: '/food',
     search: '/search',
     categories: '/cartegories',
+    orders: '/carts/orders',
     shop: '/shop',
     detail: '/product/:name/:id',
     notFound: '/:pathMatch(.*)*',

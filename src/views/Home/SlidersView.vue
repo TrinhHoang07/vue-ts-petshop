@@ -41,7 +41,7 @@ import routesConfig from '@/config/routes';
         <swiper-slide>
             <div class="slider">
                 <div class="slider-img">
-                    <img :src="img1" alt="{props.heading}" />
+                    <img :src="img1" alt="LOVE CATS" />
                     <div class="info">
                         <h3 class="title">EMPEROR STORY</h3>
                         <h1 class="heading">LOVE CATS</h1>
@@ -62,7 +62,7 @@ import routesConfig from '@/config/routes';
         <swiper-slide>
             <div class="slider">
                 <div class="slider-img">
-                    <img :src="img2" alt="{props.heading}" />
+                    <img :src="img2" alt="FRIENDLY" />
                     <div class="info">
                         <h3 class="title">FRIENDLY</h3>
                         <h1 class="heading">MY LOVE</h1>
@@ -83,7 +83,7 @@ import routesConfig from '@/config/routes';
         <swiper-slide>
             <div class="slider">
                 <div class="slider-img">
-                    <img :src="img3" alt="{props.heading}" />
+                    <img :src="img3" alt="MY LIFE" />
                     <div class="info">
                         <h3 class="title">MY LIFE</h3>
                         <h1 class="heading">LOVE DOGS</h1>

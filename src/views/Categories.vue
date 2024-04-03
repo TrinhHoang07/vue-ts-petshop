@@ -12,8 +12,10 @@ import type { TData, T_Cart, T_Categorys } from '@/model';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { formatVND } from '@/Helper';
+import { useRouter } from 'vue-router';
 
 const { infos } = useSession();
+const router = useRouter();
 const apiService = new ApiService();
 const loading = ref<boolean>(false);
 const checkAll = ref<boolean>(false);
@@ -345,16 +347,7 @@ const handleDownQuantity = (value: TData) => {
                                 >
                                 <span>₫{{ formatVND.format(totalMoney?.price ?? 0) }}</span>
                             </p>
-                            <button
-                                @click="
-                                    () => {
-                                        // onClick={handleOrder}
-                                    }
-                                "
-                                class="btn-buy"
-                            >
-                                Mua Hàng
-                            </button>
+                            <button @click="router.push(routesConfig.orders)" class="btn-buy">Mua Hàng</button>
                         </div>
                     </div>
                 </div>

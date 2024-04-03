@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { ApiService } from '@/axios/ApiService';
+import { useSession } from '@/stores';
+import { useToast } from 'primevue/usetoast';
 import { reactive, ref } from 'vue';
 
 const errors = reactive<
@@ -17,6 +20,9 @@ const errors = reactive<
 const prevPass = ref<string>('');
 const newPass = ref<string>('');
 const conNewPass = ref<string>('');
+const toast = useToast();
+const apiService = new ApiService();
+const { infos } = useSession();
 
 const handleError = (name: string) => {
     errors[`${name}`] = true;
@@ -24,6 +30,56 @@ const handleError = (name: string) => {
 
 const handleClearError = (name: string) => {
     errors[`${name}`] = false;
+};
+
+const onSubmit = () => {
+    if (newPass.value !== conNewPass.value) {
+        toast.add({
+            severity: 'error',
+            summary: 'Có lỗi',
+            detail: 'Mật khẩu mới không trùng khớp!',
+            life: 1500,
+        });
+    } else {
+        apiService.customer
+            .updatePassword(
+                (infos.user?.id as number).toString(),
+                {
+                    password: newPass.value,
+                    oldPassword: prevPass.value,
+                },
+                infos.user?.token ?? '',
+            )
+            .then((res: { message: string; statusCode: number; detail?: string }) => {
+                if (res.message === 'mismatched') {
+                    toast.add({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Mật khẩu cũ của bạn chưa chính xác, vui lòng thử lại!',
+                        life: 2500,
+                    });
+                } else if (res.message === 'success') {
+                    toast.add({
+                        severity: 'success',
+                        summary: 'Thành công',
+                        detail: 'Thay đổi mật khẩu thành công!',
+                        life: 2000,
+                    });
+
+                    prevPass.value = '';
+                    newPass.value = '';
+                    conNewPass.value = '';
+                }
+            })
+            .catch((_) => {
+                toast.add({
+                    severity: 'error',
+                    summary: 'Có lỗi',
+                    detail: 'Xảy ra lỗi!!!',
+                    life: 3000,
+                });
+            });
+    }
 };
 </script>
 
@@ -52,6 +108,7 @@ const handleClearError = (name: string) => {
                             if((Object as any).entries(errors).every((item: any) => item[1] === false)) {
                                 // hanleRegister()
                                 console.log('CALL API')
+                                onSubmit()
                             }
 
 
@@ -66,7 +123,7 @@ const handleClearError = (name: string) => {
                         id="prevPass"
                         type="text"
                         placeholder="Your name..."
-                        model="prevPass"
+                        v-model="prevPass"
                         @input="
                             () => {
                                 handleClearError('prevPass');
@@ -82,7 +139,7 @@ const handleClearError = (name: string) => {
                         id="newPass"
                         type="text"
                         placeholder="Your name..."
-                        model="newPass"
+                        v-model="newPass"
                         @input="
                             () => {
                                 handleClearError('newPass');
@@ -98,7 +155,7 @@ const handleClearError = (name: string) => {
                         id="conNewPass"
                         type="text"
                         placeholder="Your name..."
-                        model="conNewPass"
+                        v-model="conNewPass"
                         @input="
                             () => {
                                 handleClearError('conNewPass');

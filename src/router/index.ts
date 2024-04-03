@@ -27,6 +27,7 @@ import ProfileAddress from '@/views/ProfileAddress.vue';
 import ProfileNoti from '@/views/ProfileNoti.vue';
 import ProfileFriends from '@/views/ProfileFriends.vue';
 import ProfileUser from '@/views/ProfileUser.vue';
+import Orders from '@/views/Orders.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -146,6 +147,11 @@ const router = createRouter({
                     component: ProfileUser,
                     name: 'profile-user',
                     path: routesConfig.profile_user,
+                },
+                {
+                    component: Orders,
+                    name: 'orders',
+                    path: routesConfig.orders,
                 },
             ],
         },
