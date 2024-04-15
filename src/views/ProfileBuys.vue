@@ -96,14 +96,16 @@ onMounted(() => {
                                             })
                                             isDetail = false;
 
-                                            const findIndex = data.findIndex(item => item.orders_id === dataDetail?.orders_id)
-
-                                            if(findIndex !== -1) {
-                                                data.splice(findIndex, 0, {
-                                                    ...data[findIndex],
-                                                    orders_status: 'cancel'
+                                            apiService.orders
+                                                .getOrderById(`${infos.user?.id}`, infos.user?.token as string)
+                                                .then((res: T_Orders) => {
+                                                    if (res.message === 'success') {
+                                                        data = res.data;
+                                                    }
                                                 })
-                                            }
+                                                .catch((err) => {
+                                                    console.error(err);
+                                                });
                                         }
                                     })
                                     .catch(_ => {

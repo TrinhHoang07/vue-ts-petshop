@@ -8,7 +8,7 @@ type TProps = {
     medium?: any;
     small?: any;
     large?: any;
-    class?: string;
+    className?: string;
     primary?: boolean;
     click?: () => void;
 };
@@ -42,7 +42,6 @@ if (props.href) {
             to: props.to,
             href: props.href,
             disabled: props.disabled,
-            class: props.class,
             primary: props.primary,
             click: props.click,
         }"

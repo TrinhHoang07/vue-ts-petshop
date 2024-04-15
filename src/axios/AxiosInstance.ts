@@ -12,7 +12,7 @@ type _T_AxiosOpts = {
 };
 
 export class AxiosClientApi {
-    public static get<T extends any>(path: string, query?: T, config?: AxiosRequestConfig): Promise<any> {
+    public static get(path: string, query?: any, config?: AxiosRequestConfig): Promise<any> {
         const request = new AxiosRequest({
             url: {
                 path: path,
@@ -40,7 +40,7 @@ export class AxiosClientApi {
             .then((res) => res.data);
     }
 
-    public static post<T extends any>(path: string, data?: T, config?: AxiosRequestConfig): Promise<any> {
+    public static post(path: string, data?: any, config?: AxiosRequestConfig): Promise<any> {
         const request = new AxiosRequest({
             url: {
                 path: path,
@@ -58,7 +58,7 @@ export class AxiosClientApi {
             .then((res) => res.data);
     }
 
-    public static patch<T extends any>(path: string, data?: T, config?: AxiosRequestConfig): Promise<any> {
+    public static patch(path: string, data?: any, config?: AxiosRequestConfig): Promise<any> {
         const request = new AxiosRequest({
             url: {
                 path: path,
@@ -76,7 +76,7 @@ export class AxiosClientApi {
             .then((res) => res.data);
     }
 
-    public static put<T extends any>(path: string, data?: T, config?: AxiosRequestConfig): Promise<any> {
+    public static put(path: string, data?: any, config?: AxiosRequestConfig): Promise<any> {
         const request = new AxiosRequest({
             url: {
                 path: path,

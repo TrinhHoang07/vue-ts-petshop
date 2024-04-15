@@ -138,7 +138,7 @@ const handleRemoveInvite = (id: number) => {
 const handleUpdateDataProfileUser = () => {
     setDataProfile({
         id: props.id_friend,
-        isFriend: props.status === 'friended' || idsFriended.includes(props.id_friend),
+        isFriend: props.status === 'friended' || idsFriended.value.includes(props.id_friend),
         userName: props.name_friend,
         avatarPath: props.avatar_friend,
     });
