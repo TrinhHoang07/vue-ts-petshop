@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HiMenu from '@/assets/icons/HiMenu.vue';
 import { ApiService } from '@/axios/ApiService';
+import ButtonView from '@/components/ButtonView.vue';
 import PrivateRoute from '@/components/PrivateRoute.vue';
 import routesConfig from '@/config/routes';
 import { App } from '@/const/App';
@@ -9,8 +10,10 @@ import type { T_CustomerUpdate } from '@/model';
 import { isMenuMobile, useSession } from '@/stores';
 import axios from 'axios';
 import Dropdown from 'primevue/dropdown';
+import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 type _T_Data = {
     day?: {
@@ -39,6 +42,8 @@ const { setIsMenu } = isMenuMobile();
 const imageAvatar = ref<string>('');
 const apiService = new ApiService();
 const toast = useToast();
+const router = useRouter();
+const confirm = useConfirm();
 
 const days = [
     { day: '01' },
@@ -156,6 +161,28 @@ onUnmounted(() => {
     imageAvatar.value && URL.revokeObjectURL(imageAvatar.value);
 });
 
+const handleLogout = () => {
+    confirm.require({
+        header: 'Đăng xuất',
+        message: 'Bạn có chắc chắn muốn đăng xuất không?',
+        acceptLabel: 'Dồng ý',
+        rejectLabel: 'Hủy bỏ',
+        accept: () => {
+            setSessions(false, {});
+
+            toast.add({
+                severity: 'success',
+                detail: 'Đăng xuất thành công!',
+                life: 3000,
+            });
+
+            setTimeout(() => {
+                router.push(routesConfig.home);
+            }, 300);
+        },
+    });
+};
+
 const handleUpdateAvatar = (e: any) => {
     const files = e.target.files;
 
@@ -249,15 +276,18 @@ const handleSubmit = () => {
         <LayoutProfile :temporary-image="imageAvatar">
             <div class="profile">
                 <div class="header-profile">
-                    <h3 class="title">
-                        <div class="profile-into-back">
-                            <span @click="setIsMenu(true)" class="back-btn-profile">
-                                <HiMenu />
-                            </span>
-                            <span>Hồ Sơ Của Tôi</span>
-                        </div>
-                    </h3>
-                    <p class="sub-title">Quản lý thông tin hồ sơ để bảo mật tài khoản của bạn</p>
+                    <div>
+                        <h3 class="title">
+                            <div class="profile-into-back">
+                                <span @click="setIsMenu(true)" class="back-btn-profile">
+                                    <HiMenu />
+                                </span>
+                                <span>Hồ Sơ Của Tôi</span>
+                            </div>
+                        </h3>
+                        <p class="sub-title">Quản lý thông tin hồ sơ để bảo mật tài khoản của bạn</p>
+                    </div>
+                    <ButtonView medium="true" @click="handleLogout"> Đăng xuất </ButtonView>
                 </div>
                 <div class="contents">
                     <div class="form-profile">

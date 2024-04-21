@@ -16,7 +16,7 @@ const { values } = useDataInHome('products/products/home?type=cat');
         <TitleView :logo="logo" title="Mèo Cảnh" />
         <div class="list-cards">
             <CardItemZoomInLeft
-                v-for="item in values.data"
+                v-for="item in values.data.slice(0, 8)"
                 :key="item.id"
                 :to="`product/cat/${item.id}`"
                 title="MÈO CẢNH"

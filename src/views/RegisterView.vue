@@ -92,6 +92,9 @@ const handleError = (name: string) => {
 const handleClearError = (name: string) => {
     errors[`${name}`] = false;
 };
+
+const REGEXPASS = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+const REGEX_EMAIL = /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/;
 </script>
 
 <template>
@@ -115,17 +118,17 @@ const handleClearError = (name: string) => {
                             } else {
                                 handleClearError('name');
                             }
-                            if (!email.trim()) {
+                            if (!REGEX_EMAIL.test(email.trim())) {
                                 handleError('email');
                             } else {
                                 handleClearError('email');
                             }
-                            if (!password.trim()) {
+                            if (!REGEXPASS.test(password.trim())) {
                                 handleError('password');
                             } else {
                                 handleClearError('password');
                             }
-                            if (!confirmPassword.trim()) {
+                            if (!REGEXPASS.test(confirmPassword.trim())) {
                                 handleError('confirmPassword');
                             } else {
                                 handleClearError('confirmPassword');
@@ -156,7 +159,7 @@ const handleClearError = (name: string) => {
                                 }
                             "
                         />
-                        <p v-if="errors.name" class="error-field">This field is required!</p>
+                        <p v-if="errors.name" class="error-field">Trường này là bắt buộc!</p>
                     </div>
                     <div class="form-item">
                         <label htmlFor="email">Email: </label>
@@ -171,7 +174,7 @@ const handleClearError = (name: string) => {
                                 }
                             "
                         />
-                        <p v-if="errors.email" class="error-field">This field is required!</p>
+                        <p v-if="errors.email" class="error-field">Trường này phải là email!</p>
                     </div>
                     <div class="form-item">
                         <label htmlFor="password">Mật khẩu: </label>
@@ -187,8 +190,7 @@ const handleClearError = (name: string) => {
                             "
                         />
                         <p v-if="errors.password" class="error-field">
-                            Password Minimum eight characters, at least one letter, one number and one special
-                            character!
+                            Mật khẩu tối thiểu 8 ký tự, ít nhất một chữ cái, một số và một ký tự đặc biệt!
                         </p>
                     </div>
                     <div class="form-item">
@@ -204,7 +206,7 @@ const handleClearError = (name: string) => {
                                 }
                             "
                         />
-                        <p v-if="errors.confirmPassword" class="error-field">This field is required!</p>
+                        <p v-if="errors.confirmPassword" class="error-field">Trường này là bắt buộc!</p>
                         <p v-if="errors.checkpass" class="error-field">Mật khẩu không khớp!</p>
                     </div>
                     <div class="form-submit">

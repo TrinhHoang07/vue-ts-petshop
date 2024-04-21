@@ -9,6 +9,7 @@ type TProps = {
 
 type Select = {
     name: string;
+    value: string;
 };
 
 const props = defineProps<TProps>();
@@ -16,11 +17,8 @@ const props = defineProps<TProps>();
 const { isFilterProduct, setIsFilterProduct } = filterByProduct();
 
 const values: Select[] = [
-    { name: 'Phổ biến' },
-    { name: 'Điểm đánh giá' },
-    { name: 'Mới về' },
-    { name: 'Giá thấp đến cao' },
-    { name: 'Giá cao đến thấp' },
+    { name: 'Giá thấp đến cao', value: 'increment' },
+    { name: 'Giá cao đến thấp', value: 'reduce' },
 ];
 
 console.log(props.title);

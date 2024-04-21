@@ -17,7 +17,10 @@ onMounted(() => {
         top: 0,
     });
 
-    setIsFilterProduct('');
+    setIsFilterProduct({
+        name: '',
+        value: '',
+    });
 });
 
 const value = ref<[number, number]>([0, 100]);
@@ -30,6 +33,7 @@ console.log('data: ' + values.data[0]);
 const dataRender = ref<_T_DataItemHome[]>([]);
 const first = ref<number>(1);
 const { defaultPrice: valuess, setPrice } = filterItemByPrice();
+const { isFilterProduct } = filterByProduct();
 const { setInit } = initPrice();
 const { isFilter } = FilterCondition();
 
@@ -48,6 +52,18 @@ watch(values, () => {
 
         dataRender.value = values.data;
         loading.value = false;
+    }
+});
+
+watch(isFilterProduct, () => {
+    if (isFilterProduct.data.value === 'increment') {
+        dataRender.value = dataRender.value.sort((a, b) => {
+            return a.price - b.price;
+        });
+    } else {
+        dataRender.value = dataRender.value.sort((a, b) => {
+            return b.price - a.price;
+        });
     }
 });
 

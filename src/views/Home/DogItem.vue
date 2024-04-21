@@ -16,7 +16,7 @@ const { values } = useDataInHome('products/products/home?type=dog');
         <TitleView :logo="logo" title="Chó Cảnh" />
         <div class="list-cards">
             <CardItem
-                v-for="item in values.data"
+                v-for="item in values.data.slice(0, 8)"
                 :key="item.id"
                 :to="`product/dog/${item.id}`"
                 title="CHÓ CẢNH"

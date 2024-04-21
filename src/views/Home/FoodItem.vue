@@ -16,7 +16,7 @@ const { values } = useDataInHome('products/products/home?type=food');
         <TitleView :logo="logo" title="Đồ Ăn" />
         <div class="list-cards">
             <CardItemFlip
-                v-for="item in values.data"
+                v-for="item in values.data.slice(0, 8)"
                 :key="item.id"
                 :to="`product/food/${item.id}`"
                 title="ĐỒ ĂN"

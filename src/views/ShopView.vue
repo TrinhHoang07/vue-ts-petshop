@@ -9,7 +9,7 @@ import { FilterCondition, filterByProduct, filterItemByPrice, initPrice } from '
 import Paginator from 'primevue/paginator';
 import { onMounted, reactive, ref, watch } from 'vue';
 
-const { setIsFilterProduct } = filterByProduct();
+const { isFilterProduct, setIsFilterProduct } = filterByProduct();
 
 onMounted(() => {
     document.title = 'Petshop | Petshop chất lượng số 1 Việt Nam!';
@@ -18,7 +18,10 @@ onMounted(() => {
         top: 0,
     });
 
-    setIsFilterProduct('');
+    setIsFilterProduct({
+        name: '',
+        value: '',
+    });
 });
 
 const apiService = new ApiService();
@@ -74,6 +77,18 @@ watch(data, () => {
         dataRender.data = data.data;
         setPrice(getValueFilterInArray(data.data));
         setInit(getValueFilterInArray(data.data));
+    }
+});
+
+watch(isFilterProduct, () => {
+    if (isFilterProduct.data.value === 'increment') {
+        dataRender.data = dataRender.data.sort((a, b) => {
+            return a.price - b.price;
+        });
+    } else {
+        dataRender.data = dataRender.data.sort((a, b) => {
+            return b.price - a.price;
+        });
     }
 });
 

@@ -72,12 +72,18 @@ export const FilterCondition = defineStore('FilterCondition', () => {
 
 export const filterByProduct = defineStore('filterByProduct', () => {
     const isFilterProduct = reactive<{
-        data: string;
+        data: {
+            name: string;
+            value: string;
+        };
     }>({
-        data: '',
+        data: {
+            name: '',
+            value: '',
+        },
     });
 
-    const setIsFilterProduct = (data: string) => {
+    const setIsFilterProduct = (data: { name: string; value: string }) => {
         isFilterProduct.data = data;
     };
 

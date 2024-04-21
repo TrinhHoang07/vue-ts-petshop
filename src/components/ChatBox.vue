@@ -29,8 +29,8 @@ const messages = reactive<{
     data: [
         {
             role: 'admin',
-            name: 'Van Hoang',
-            message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
+            name: 'Minh Thong',
+            message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Minh Thông!',
         },
     ],
 });
@@ -43,7 +43,7 @@ onMounted(() => {
             messages.data.push({
                 message:
                     'Chúng tôi sẽ trả lời bạn sớm nhất có thể. Nếu chờ lâu bạn hãy liên hệ: 0396254427! Xin cảm ơn.',
-                name: 'Van Hoang',
+                name: 'Minh Thong',
                 role: 'admin',
             });
         });
@@ -104,7 +104,7 @@ const handleSubmit = () => {
     if (value.value.trim().length > 0) {
         socketContext.emit('messageToAdmin', {
             id: socketContext.id,
-            name: 'Thuy cute',
+            name: 'User Guest',
             role: 'user',
             message: value.value,
         });
@@ -113,7 +113,7 @@ const handleSubmit = () => {
         messages.data.push({
             message: value.value,
             role: 'user',
-            name: 'Thuy cute',
+            name: 'User Guest',
             id: socketContext.id,
         });
         value.value = '';
@@ -160,7 +160,7 @@ watch([open, messages], () => {
             <div class="preview-chat-box">
                 <div class="container-preview">
                     <div class="triangle-sharp"></div>
-                    <h3>Admin - Hoàng</h3>
+                    <h3>Admin - Thông</h3>
                     <p v-if="lassMessage.role === 'user'">Bạn: {{ lassMessage.message }}</p>
                     <div v-else class="wrapper-message-preview">
                         <span v-bind:style="{ margin: 0, padding: 0, color: 'dodgerblue' }">
@@ -177,7 +177,7 @@ watch([open, messages], () => {
                     <div class="wrap-img">
                         <img :src="logo" alt="logo shop" />
                     </div>
-                    <h3 class="heading">Chat với Hoàng</h3>
+                    <h3 class="heading">Chat với Thông</h3>
                 </div>
                 <div
                     @click="
@@ -226,12 +226,12 @@ watch([open, messages], () => {
                 <TypeAdmin v-if="visible" />
                 <div class="footer-content">
                     <div class="input-footer">
-                        <span class="icons">
+                        <!-- <span class="icons">
                             <BsFillImage />
                         </span>
                         <span class="icons mr-6">
                             <BiHappy />
-                        </span>
+                        </span> -->
                         <input @keydown="handleEnter" ref="inputRef" v-model="value" placeholder="Aa..." />
                     </div>
                     <IoSend />
