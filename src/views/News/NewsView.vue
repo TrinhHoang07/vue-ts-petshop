@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import SearchNew from './SearchNew.vue';
-import logo_1 from '@/assets/images/new_1.png';
-import logo_2 from '@/assets/images/new_2.jpg';
-import logo_3 from '@/assets/images/new_3.jpg';
-import logo_4 from '@/assets/images/new_4.jpg';
 import NavBarNew from './NavBarNew.vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import { ApiService } from '@/axios/ApiService';
+import type { Blog, T_Blogs } from '@/model';
+import Loading from '@/components/Loading.vue';
+import { useRouter } from 'vue-router';
+
+const apiService = new ApiService();
+const isLoading = ref<boolean>(true);
+const data = ref<Blog[]>([]);
+const router = useRouter();
 
 onMounted(() => {
     document.title = 'Tin tức | Petshop chất lượng số 1 Việt Nam!';
@@ -13,6 +18,21 @@ onMounted(() => {
         behavior: 'smooth',
         top: 0,
     });
+});
+
+onMounted(() => {
+    apiService.blogs
+        .getBlogs()
+        .then((res: T_Blogs) => {
+            if (res.message === 'success') {
+                data.value = res.data;
+                isLoading.value = false;
+            }
+        })
+        .catch((err) => {
+            isLoading.value = false;
+            console.error(err);
+        });
 });
 </script>
 
@@ -26,84 +46,25 @@ onMounted(() => {
                     <NavBarNew />
                 </div>
                 <div class="list-news">
-                    <div class="new-item">
-                        <div class="wrapper-item">
-                            <div class="item-thumb">
-                                <img :src="logo_1" alt="thumbnail" />
-                            </div>
-                            <div class="item-info">
-                                <h3 class="heading-title">Duis luctus elit nisi, et cursus magna pellentesque non.</h3>
-                                <p class="item-description">
-                                    Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="new-item">
-                        <div class="wrapper-item">
-                            <div class="item-thumb">
-                                <img :src="logo_2" alt="thumbnail" />
-                            </div>
-                            <div class="item-info">
-                                <h3 class="heading-title">Duis luctus elit nisi, et cursus magna pellentesque non.</h3>
-                                <p class="item-description">
-                                    Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]
-                                </p>
+                    <template v-if="!isLoading">
+                        <div
+                            @click="() => router.push(`/news/detail/${item.id}`)"
+                            v-for="item in data"
+                            class="new-item"
+                            :key="item.id"
+                        >
+                            <div class="wrapper-item">
+                                <div class="item-thumb">
+                                    <img :src="item.preview_url" alt="thumbnail" />
+                                </div>
+                                <div class="item-info">
+                                    <h3 class="heading-title">{{ item.title }}.</h3>
+                                    <p class="item-description">{{ item.title }} [...]</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="new-item">
-                        <div class="wrapper-item">
-                            <div class="item-thumb">
-                                <img :src="logo_3" alt="thumbnail" />
-                            </div>
-                            <div class="item-info">
-                                <h3 class="heading-title">Duis luctus elit nisi, et cursus magna pellentesque non.</h3>
-                                <p class="item-description">
-                                    Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="new-item">
-                        <div class="wrapper-item">
-                            <div class="item-thumb">
-                                <img :src="logo_4" alt="thumbnail" />
-                            </div>
-                            <div class="item-info">
-                                <h3 class="heading-title">Duis luctus elit nisi, et cursus magna pellentesque non.</h3>
-                                <p class="item-description">
-                                    Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="new-item">
-                        <div class="wrapper-item">
-                            <div class="item-thumb">
-                                <img :src="logo_1" alt="thumbnail" />
-                            </div>
-                            <div class="item-info">
-                                <h3 class="heading-title">Duis luctus elit nisi, et cursus magna pellentesque non.</h3>
-                                <p class="item-description">
-                                    Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="new-item">
-                        <div class="wrapper-item">
-                            <div class="item-thumb">
-                                <img :src="logo_1" alt="thumbnail" />
-                            </div>
-                            <div class="item-info">
-                                <h3 class="heading-title">Duis luctus elit nisi, et cursus magna pellentesque non.</h3>
-                                <p class="item-description">
-                                    Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    </template>
+                    <Loading v-else />
                 </div>
             </div>
         </div>

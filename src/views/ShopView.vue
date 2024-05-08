@@ -81,7 +81,9 @@ watch(data, () => {
 });
 
 watch(isFilterProduct, () => {
-    if (isFilterProduct.data.value === 'increment') {
+    if (isFilterProduct.data.value === 'news') {
+        dataRender.data = data.data.reverse();
+    } else if (isFilterProduct.data.value === 'increment') {
         dataRender.data = dataRender.data.sort((a, b) => {
             return a.price - b.price;
         });

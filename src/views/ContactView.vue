@@ -48,14 +48,14 @@ const handleClearError = (name: string) => {
                     <TitleView :logo="logo" title="LIÊN HỆ VỚI CHÚNG TÔI" />
                     <div class="description">
                         <p class="description-p">
-                            Mona Media là công ty thiết kế website cao cấp có tuổi đời 8+ năm trong ngành.
+                            PETMART là công ty thiết kế website cao cấp có tuổi đời 8+ năm trong ngành.
                         </p>
                         <p class="description-p">
-                            Ngay từ những ngày đầu hoạt động, Mona Media đã chọn cho mình một phân khúc riêng, khác biệt
+                            Ngay từ những ngày đầu hoạt động, PETMART đã chọn cho mình một phân khúc riêng, khác biệt
                             với hàng ngàn công ty thiết kế website trên thị trường: phân khúc của sự hiệu quả.
                         </p>
                         <p class="description-p">
-                            Những website/phần mềm từ Mona Media luôn được tư vấn, phát triển, tối ưu nhằm mang lại hiệu
+                            Những website/phần mềm từ PETMART luôn được tư vấn, phát triển, tối ưu nhằm mang lại hiệu
                             quả rõ rệt cho hoạt động kinh doanh của doanh nghiệp.
                         </p>
                     </div>

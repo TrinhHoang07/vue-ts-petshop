@@ -17,6 +17,7 @@ const props = defineProps<TProps>();
 const { isFilterProduct, setIsFilterProduct } = filterByProduct();
 
 const values: Select[] = [
+    { name: 'Mới về', value: 'news' },
     { name: 'Giá thấp đến cao', value: 'increment' },
     { name: 'Giá cao đến thấp', value: 'reduce' },
 ];

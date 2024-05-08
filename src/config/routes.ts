@@ -25,6 +25,7 @@ const routesConfig = {
     orders: '/carts/orders',
     shop: '/shop',
     detail: '/product/:name/:id',
+    newsDetail: 'news/detail/:id',
     notFound: '/:pathMatch(.*)*',
 };
 

@@ -80,6 +80,7 @@ export type TPostCheckConversation = {
 
 export type TData = {
     id: number;
+    id_original: number;
     name: string;
     color: string;
     price: number;

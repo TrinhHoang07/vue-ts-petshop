@@ -6,7 +6,17 @@ import image1 from '@/assets/images/dog_home_logo.png';
 import image2 from '@/assets/images/cat_home_logo.png';
 import image3 from '@/assets/images/food_home_logo.png';
 import ButtonView from '@/components/ButtonView.vue';
+import PetIcon from '@/assets/icons/PetIcon.vue';
+import CutIcon from '@/assets/icons/CutIcon.vue';
+import Cerfitication from '@/assets/icons/Cerfitication.vue';
 import { onMounted } from 'vue';
+
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Autoplay, Pagination, EffectCreative } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 onMounted(() => {
     document.title = 'Giới thiệu | Petshop chất lượng số 1 Việt Nam!';
@@ -62,6 +72,127 @@ onMounted(() => {
                 </p>
                 <div class="btn">
                     <ButtonView small="true">CLICK ME</ButtonView>
+                </div>
+            </div>
+        </div>
+        <div class="description-feeling-user">
+            <swiper
+                :modules="[Autoplay]"
+                :slides-per-view="1"
+                :space-between="0"
+                :loop="true"
+                :autoplay="{
+                    delay: 3500,
+                    disableOnInteraction: false,
+                    waitForTransition: true,
+                }"
+                class="des-swiper-feel"
+            >
+                <swiper-slide>
+                    <div class="description-slider-item-feel">
+                        <div class="des-item-image-user-feel">
+                            <img :src="image1" alt="preview avatar user" />
+                        </div>
+                        <div class="des-item-info-user-feel">
+                            <h3>Nguyen Minh Thong</h3>
+                            <p>
+                                Dịch vụ Chăm sóc thú cưng cung cấp một dịch vụ tuyệt vời và tôi sẽ gửi con chó của mình
+                                đến đó một lần nữa mà không cần thắc mắc gì. Tôi tin tưởng vào đội này và tôi sẽ không
+                                đi đâu khác. Chăm sóc và phục vụ năm sao!
+                            </p>
+                        </div>
+                    </div>
+                </swiper-slide>
+                <swiper-slide>
+                    <div class="description-slider-item-feel">
+                        <div class="des-item-image-user-feel">
+                            <img :src="image1" alt="preview avatar user" />
+                        </div>
+                        <div class="des-item-info-user-feel">
+                            <h3>Tran Trung Kien</h3>
+                            <p>
+                                Tôi đã thử nhiều người chải lông trước khi chải lông cho thú cưng. Nhân viên thực sự
+                                thân thiện, giá cả tuyệt vời và trên hết là một chú chó vui vẻ và được chăm sóc chu đáo.
+                                Bạn làm một công việc tuyệt vời và bạn là người giỏi nhất.
+                            </p>
+                        </div>
+                    </div>
+                </swiper-slide>
+                <swiper-slide>
+                    <div class="description-slider-item-feel">
+                        <div class="des-item-image-user-feel">
+                            <img :src="image1" alt="preview avatar user" />
+                        </div>
+                        <div class="des-item-info-user-feel">
+                            <h3>Trinh Van Hoang</h3>
+                            <p>
+                                Bạn thực sự tuyệt vời! Chúng tôi rất vui vì đã tìm được người có thể chải lông cho thú
+                                cưng của mình đúng cách và theo cách chúng tôi muốn chúng được chải lông. Cảm ơn các bạn
+                                rất nhiều.
+                            </p>
+                        </div>
+                    </div>
+                </swiper-slide>
+                <swiper-slide>
+                    <div class="description-slider-item-feel">
+                        <div class="des-item-image-user-feel">
+                            <img :src="image1" alt="preview avatar user" />
+                        </div>
+                        <div class="des-item-info-user-feel">
+                            <h3>Tran Thi Thuy</h3>
+                            <p>
+                                Tôi đã thử nhiều người chải lông trước khi chải lông cho thú cưng. Nhân viên thực sự
+                                thân thiện, giá cả tuyệt vời và trên hết là một chú chó vui vẻ và được chăm sóc chu đáo.
+                                Bạn làm một công việc tuyệt vời và bạn là người giỏi nhất.
+                            </p>
+                        </div>
+                    </div>
+                </swiper-slide>
+                <swiper-slide>
+                    <div class="description-slider-item-feel">
+                        <div class="des-item-image-user-feel">
+                            <img :src="image1" alt="preview avatar user" />
+                        </div>
+                        <div class="des-item-info-user-feel">
+                            <h3>Nguyen Thi Van</h3>
+                            <p>
+                                Dịch vụ Chăm sóc thú cưng cung cấp một dịch vụ tuyệt vời và tôi sẽ gửi con chó của mình
+                                đến đó một lần nữa mà không cần thắc mắc gì. Tôi tin tưởng vào đội này và tôi sẽ không
+                                đi đâu khác. Chăm sóc và phục vụ năm sao!
+                            </p>
+                        </div>
+                    </div>
+                </swiper-slide>
+            </swiper>
+        </div>
+        <div class="description-top-service">
+            <div class="des-top-service-item">
+                <span>
+                    <CutIcon />
+                </span>
+                <div class="des-top-item-infos">
+                    <h5>Dịch Vụ Chăm Sóc Hàng Đầu</h5>
+                    <p>Đội ngũ chuyên nghiệp của chúng tôi cung cấp dịch vụ chải chuốt đặc biệt.</p>
+                </div>
+            </div>
+            <div class="des-top-service-item">
+                <span>
+                    <Cerfitication />
+                </span>
+                <div class="des-top-item-infos">
+                    <h5>Dịch Vụ Cao Cấp</h5>
+                    <p>Chúng tôi tự hào mang đến cho bạn và thú cưng của bạn sự quan tâm cá nhân.</p>
+                </div>
+            </div>
+            <div class="des-top-service-item">
+                <span>
+                    <PetIcon />
+                </span>
+                <div class="des-top-item-infos">
+                    <h5>Chúng tôi yêu mọi thú cưng</h5>
+                    <p>
+                        Chúng tôi yêu thương mọi thú cưng để thú cưng của bạn cảm thấy thư giãn và không bị căng thẳng.
+                    </p>
                 </div>
             </div>
         </div>

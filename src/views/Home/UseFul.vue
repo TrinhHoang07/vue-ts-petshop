@@ -12,6 +12,25 @@ import { RouterLink } from 'vue-router';
 import TitleView from '@/components/TitleView.vue';
 import ButtonView from '@/components/ButtonView.vue';
 import routesConfig from '@/config/routes';
+import { onMounted, ref } from 'vue';
+import { ApiService } from '@/axios/ApiService';
+import type { Blog, T_Blogs } from '@/model';
+
+const apiService = new ApiService();
+const data = ref<Blog[]>([]);
+
+onMounted(() => {
+    apiService.blogs
+        .getBlogs()
+        .then((res: T_Blogs) => {
+            if (res.message === 'success') {
+                data.value = res.data;
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+});
 </script>
 
 <template>
@@ -43,114 +62,14 @@ import routesConfig from '@/config/routes';
                 }"
                 class="mySwiper"
             >
-                <swiper-slide>
-                    <RouterLink :to="'/'" class="wrapper-useful-item">
+                <swiper-slide v-for="item in data" :key="item.id">
+                    <RouterLink :to="`/news/detail/${item.id}`" class="wrapper-useful-item">
                         <div class="avatar">
-                            <img :src="img1" alt="preview avatar" />
+                            <img :src="item.preview_url" alt="preview avatar" />
                         </div>
                         <div class="description">
-                            <h3 class="heading-item">IN RUTRUM TEMPUS PURUS</h3>
-                            <p class="content-description">
-                                Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]
-                            </p>
-                            <p class="link-useful">XEM THÊM</p>
-                        </div>
-                    </RouterLink>
-                </swiper-slide>
-                <swiper-slide>
-                    <RouterLink :to="'/'" class="wrapper-useful-item">
-                        <div class="avatar">
-                            <img :src="img1" alt="preview avatar" />
-                        </div>
-                        <div class="description">
-                            <h3 class="heading-item">IN RUTRUM TEMPUS PURUS</h3>
-                            <p class="content-description">
-                                Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]
-                            </p>
-                            <p class="link-useful">XEM THÊM</p>
-                        </div>
-                    </RouterLink>
-                </swiper-slide>
-                <swiper-slide>
-                    <RouterLink :to="'/'" class="wrapper-useful-item">
-                        <div class="avatar">
-                            <img :src="img1" alt="preview avatar" />
-                        </div>
-                        <div class="description">
-                            <h3 class="heading-item">IN RUTRUM TEMPUS PURUS</h3>
-                            <p class="content-description">
-                                Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]
-                            </p>
-                            <p class="link-useful">XEM THÊM</p>
-                        </div>
-                    </RouterLink>
-                </swiper-slide>
-                <swiper-slide>
-                    <RouterLink :to="'/'" class="wrapper-useful-item">
-                        <div class="avatar">
-                            <img :src="img1" alt="preview avatar" />
-                        </div>
-                        <div class="description">
-                            <h3 class="heading-item">IN RUTRUM TEMPUS PURUS</h3>
-                            <p class="content-description">
-                                Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]
-                            </p>
-                            <p class="link-useful">XEM THÊM</p>
-                        </div>
-                    </RouterLink>
-                </swiper-slide>
-                <swiper-slide>
-                    <RouterLink :to="'/'" class="wrapper-useful-item">
-                        <div class="avatar">
-                            <img :src="img1" alt="preview avatar" />
-                        </div>
-                        <div class="description">
-                            <h3 class="heading-item">IN RUTRUM TEMPUS PURUS</h3>
-                            <p class="content-description">
-                                Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]
-                            </p>
-                            <p class="link-useful">XEM THÊM</p>
-                        </div>
-                    </RouterLink>
-                </swiper-slide>
-                <swiper-slide>
-                    <RouterLink :to="'/'" class="wrapper-useful-item">
-                        <div class="avatar">
-                            <img :src="img1" alt="preview avatar" />
-                        </div>
-                        <div class="description">
-                            <h3 class="heading-item">IN RUTRUM TEMPUS PURUS</h3>
-                            <p class="content-description">
-                                Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]
-                            </p>
-                            <p class="link-useful">XEM THÊM</p>
-                        </div>
-                    </RouterLink>
-                </swiper-slide>
-                <swiper-slide>
-                    <RouterLink :to="'/'" class="wrapper-useful-item">
-                        <div class="avatar">
-                            <img :src="img1" alt="preview avatar" />
-                        </div>
-                        <div class="description">
-                            <h3 class="heading-item">IN RUTRUM TEMPUS PURUS</h3>
-                            <p class="content-description">
-                                Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]
-                            </p>
-                            <p class="link-useful">XEM THÊM</p>
-                        </div>
-                    </RouterLink>
-                </swiper-slide>
-                <swiper-slide>
-                    <RouterLink :to="'/'" class="wrapper-useful-item">
-                        <div class="avatar">
-                            <img :src="img1" alt="preview avatar" />
-                        </div>
-                        <div class="description">
-                            <h3 class="heading-item">IN RUTRUM TEMPUS PURUS</h3>
-                            <p class="content-description">
-                                Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]
-                            </p>
+                            <h3 class="heading-item">{{ item.title }}</h3>
+                            <p class="content-description">{{ item.title }} [...]</p>
                             <p class="link-useful">XEM THÊM</p>
                         </div>
                     </RouterLink>

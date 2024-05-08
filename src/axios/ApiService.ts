@@ -51,6 +51,7 @@ export class ApiService {
         const route = {
             getCartsByUserId: (userId: string) => `carts/cart-by-customer/${userId}`,
             addToCart: 'carts/add-to-cart',
+            deleteFromCart: (cartId: string) => `carts/delete-cart/${cartId}`,
         };
 
         return {
@@ -62,6 +63,13 @@ export class ApiService {
                 }),
             addToCart: (data: TPostAddToCart, token: string) =>
                 AxiosClientApi.post(route.addToCart, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+
+            deleteFromCart: (cartId: string, token: string) =>
+                AxiosClientApi.delete(route.deleteFromCart(cartId), {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
@@ -140,10 +148,12 @@ export class ApiService {
 
     get blogs() {
         const route = {
+            getBlogs: 'blogs/all',
             getBlogById: (blogId: string) => `blogs/blog/${blogId}`,
         };
 
         return {
+            getBlogs: () => AxiosClientApi.get(route.getBlogs),
             getBlogById: (blogId: string) => AxiosClientApi.get(route.getBlogById(blogId)),
             route,
         };

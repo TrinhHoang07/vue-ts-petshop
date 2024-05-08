@@ -145,6 +145,16 @@ const handleOrders = () => {
             .addOrder(dataPost, infos.user?.token ?? '')
             .then((res: T_AddOrder) => {
                 if (res.message === 'success') {
+                    apiService.carts
+                        .deleteFromCart(`${items.data[0].id_original}`, infos.user.token ?? '')
+                        .then((res: { message: string; statusCode: number }) => {
+                            if (res.message === 'success') {
+                                //////////////////
+                                console.log('da xoa thanh cong san pham da mua trong gio hang');
+                            }
+                        })
+                        .catch((err) => console.error(err));
+
                     return apiService.payments
                         .addPayment(
                             {
