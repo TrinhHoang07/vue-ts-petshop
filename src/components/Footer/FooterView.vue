@@ -16,7 +16,7 @@ import ContactView from './ContactView.vue';
             </div>
         </div>
         <div class="author">
-            <p>© 2023. Design by Minh Thong <span>❤</span></p>
+            <p>© 2024. Design by Minh Thong <span>❤</span></p>
         </div>
     </footer>
 </template>
