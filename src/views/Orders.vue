@@ -3,9 +3,11 @@ import { itemsOrder, useSession } from '@/stores';
 import image from '@/assets/images/success-pay.png';
 import imagefail from '@/assets/images/fail-pay.png';
 import AddressScreen from '../components/AddressScreen.vue';
+import PaymentScreen from '../components/PaymentScreen.vue';
 import ButtonView from '@/components/ButtonView.vue';
 import routesConfig from '@/config/routes';
 import Location from '@/assets/icons/Location.vue';
+import RiCoupon3Fill from '@/assets/icons/RiCoupon3Fill.vue';
 import Dollars from '@/assets/icons/Dollars.vue';
 import Coupons from '@/assets/icons/Coupons.vue';
 import BillDetail from '@/assets/icons/BillDetail.vue';
@@ -24,6 +26,7 @@ const toast = useToast();
 const apiService = new ApiService();
 const { infos } = useSession();
 const isChangeAddress = ref<boolean>(false);
+const isChangePayment = ref<boolean>(false);
 const statePay = ref<string>('');
 const voucher = ref<{
     ship: number;
@@ -34,6 +37,15 @@ const voucher = ref<{
 });
 const addresses = ref<Address[]>([]);
 const addressChoose = ref<Address>();
+const paymentChoose = ref<{
+    id: number;
+    method: string;
+    content: string;
+}>({
+    id: 1,
+    method: 'CASH',
+    content: 'Tiền mặt',
+});
 
 onMounted(() => {
     document.title = 'Mua sắm | Petshop chất lượng số 1 Việt Nam!';
@@ -89,7 +101,7 @@ onMounted(() => {
     }
 });
 
-const handleGetPaymentById = (res: { url: string; id: number }) => {
+const handleGetPaymentById = (res: { url: string; id: number }, id_original?: number) => {
     apiService.payments
         .getPaymentById(`${res.id}`, infos.user?.token ?? '')
         .then((res: T_Payment) => {
@@ -104,6 +116,9 @@ const handleGetPaymentById = (res: { url: string; id: number }) => {
                 clearInterval(timer.value);
             } else if (res.message === 'success' && res.data.state === '03') {
                 statePay.value = 'error';
+                if (id_original) {
+                    handleDeleteOrder(id_original);
+                }
                 toast.add({
                     severity: 'error',
                     summary: 'Có lỗi',
@@ -113,6 +128,9 @@ const handleGetPaymentById = (res: { url: string; id: number }) => {
                 clearInterval(timer.value);
             } else if (res.message === 'success' && res.data.state === '97') {
                 statePay.value = 'checksumfail';
+                if (id_original) {
+                    handleDeleteOrder(id_original);
+                }
                 toast.add({
                     severity: 'error',
                     summary: 'Có lỗi',
@@ -125,6 +143,30 @@ const handleGetPaymentById = (res: { url: string; id: number }) => {
         .catch((_) => {
             statePay.value = 'error';
         });
+};
+
+const handleDeleteFromCart = (id: number) => {
+    apiService.carts
+        .deleteFromCart(`${id}`, infos.user.token ?? '')
+        .then((res: { message: string; statusCode: number }) => {
+            if (res.message === 'success') {
+                //////////////////
+                console.log('da xoa thanh cong san pham da mua trong gio hang');
+            }
+        })
+        .catch((err) => console.error(err));
+};
+
+const handleDeleteOrder = (id: number) => {
+    apiService.orders
+        .deleteOrderById(`${id}`, infos.user.token ?? '')
+        .then((res: { message: string; statusCode: number }) => {
+            if (res.message === 'success') {
+                //////////////////
+                console.log('da xoa thanh cong san pham da mua error');
+            }
+        })
+        .catch((err) => console.error(err));
 };
 
 const handleOrders = () => {
@@ -140,71 +182,76 @@ const handleOrders = () => {
         };
 
         console.log('orders: ', dataPost);
+        console.log('payment' + paymentChoose.value.method);
 
-        apiService.orders
-            .addOrder(dataPost, infos.user?.token ?? '')
-            .then((res: T_AddOrder) => {
+        if (paymentChoose.value.method === 'CASH') {
+            apiService.orders.addOrder(dataPost, infos.user.token ?? '').then((res: T_AddOrder) => {
                 if (res.message === 'success') {
-                    apiService.carts
-                        .deleteFromCart(`${items.data[0].id_original}`, infos.user.token ?? '')
-                        .then((res: { message: string; statusCode: number }) => {
-                            if (res.message === 'success') {
-                                //////////////////
-                                console.log('da xoa thanh cong san pham da mua trong gio hang');
-                            }
-                        })
-                        .catch((err) => console.error(err));
+                    statePay.value = 'success';
+                    handleDeleteFromCart(items.data[0].id_original);
+                }
+            });
+        } else {
+            apiService.orders
+                .addOrder(dataPost, infos.user?.token ?? '')
+                .then((resContainer: T_AddOrder) => {
+                    if (resContainer.message === 'success') {
+                        handleDeleteFromCart(items.data[0].id_original);
 
+                        return apiService.payments
+                            .addPayment(
+                                {
+                                    state: '99',
+                                    order_id: resContainer.data.id,
+                                },
+                                infos.user?.token ?? '',
+                            )
+                            .then((res: T_Payment) => {
+                                if (res.message === 'success') {
+                                    return {
+                                        res,
+                                        original_id: resContainer.data.id,
+                                    };
+                                }
+                            })
+
+                            .catch((err) => console.error(err));
+                    }
+                })
+                .then((resContainer) => {
                     return apiService.payments
-                        .addPayment(
+                        .createVNPAY(
                             {
-                                state: '99',
-                                order_id: res.data.id,
+                                amount: 1000000,
+                                pay_id: resContainer?.res?.data.id,
+                                // bankCode: 'VNPAYQR',
+                                orderInfo: 'Test thanh toan VN PAY QR',
                             },
                             infos.user?.token ?? '',
                         )
-                        .then((res: T_Payment) => {
-                            if (res.message === 'success') {
-                                return res;
+                        .then((res: { url: string; id: number }) => {
+                            if (res.url) {
+                                window.open(res.url);
+
+                                timer.value = setInterval(() => {
+                                    handleGetPaymentById(res, resContainer?.original_id);
+                                }, 1500);
                             }
                         })
-
-                        .catch((err) => console.error(err));
-                }
-            })
-            .then((res) => {
-                return apiService.payments
-                    .createVNPAY(
-                        {
-                            amount: 1000000,
-                            pay_id: res?.data.id,
-                            // bankCode: 'VNPAYQR',
-                            orderInfo: 'Test thanh toan VN PAY QR',
-                        },
-                        infos.user?.token ?? '',
-                    )
-                    .then((res: { url: string; id: number }) => {
-                        if (res.url) {
-                            window.open(res.url);
-
-                            timer.value = setInterval(() => {
-                                handleGetPaymentById(res);
-                            }, 1500);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log('error VNPAY: ' + err);
+                        .catch((err) => {
+                            console.log('error VNPAY: ' + err);
+                        });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    toast.add({
+                        severity: 'error',
+                        summary: 'Thất bại',
+                        detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
+                        life: 3000,
                     });
-            })
-            .catch((err) => {
-                console.error(err);
-                toast.add({
-                    severity: 'error',
-                    summary: 'Thất bại',
-                    detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
-                    life: 3000,
                 });
-            });
+        }
     } else {
         toast.add({
             severity: 'error',
@@ -219,8 +266,16 @@ const setIsChangeAddress = (data: boolean) => {
     isChangeAddress.value = data;
 };
 
+const setIsChangePayment = (data: boolean) => {
+    isChangePayment.value = data;
+};
+
 const setAddressChoose = (data: Address) => {
     addressChoose.value = data;
+};
+
+const setPaymentChoose = (data: { id: number; method: string; content: string }) => {
+    paymentChoose.value = data;
 };
 </script>
 
@@ -234,6 +289,14 @@ const setAddressChoose = (data: Address) => {
                 :setChoose="setAddressChoose"
                 :choose="addressChoose"
             />
+
+            <PaymentScreen
+                :open="isChangePayment"
+                :setOpen="setIsChangePayment"
+                :setChoose="setPaymentChoose"
+                :choose="paymentChoose"
+            />
+
             <div v-if="!!statePay" class="fixed-payment">
                 <div class="wrapper-payment">
                     <span
@@ -347,7 +410,16 @@ const setAddressChoose = (data: Address) => {
                     </span>
                     <p>Phương thức thanh toán</p>
                 </div>
-                <p class="select-voucher">Chọn phương thức</p>
+                <div :style="{ display: 'flex', alignItems: 'center' }">
+                    <p
+                        :style="{ color: 'orange', marginRight: '12px' }"
+                        class="select-voucher"
+                        @click="isChangePayment = true"
+                    >
+                        {{ paymentChoose.content }}
+                    </p>
+                    <ButtonView small="true" @click="isChangePayment = true">Thay đổi</ButtonView>
+                </div>
             </div>
             <div class="details-payments">
                 <div class="heading-pay">

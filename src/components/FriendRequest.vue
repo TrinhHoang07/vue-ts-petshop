@@ -7,6 +7,7 @@ import type { FriendGiveInvite, T_FriendGiveInvite } from '@/model';
 import { dataProfile, useSession } from '@/stores';
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import ButtonView from './ButtonView.vue';
 
 const props = defineProps<{
     isOpen: boolean;
@@ -101,7 +102,7 @@ const handleAcceptFriendship = (item: FriendGiveInvite) => {
                             <p>5 bạn chung</p>
                         </div>
                     </RouterLink>
-                    <Button @click="() => handleAcceptFriendship(item)" small="true"> Xác nhận </Button>
+                    <ButtonView @click="() => handleAcceptFriendship(item)" small="true"> Xác nhận </ButtonView>
                 </div>
             </div>
             <p v-else class="not-request" :style="{ textAlign: 'center' }">Bạn chưa có lời mời kết bạn nào!</p>

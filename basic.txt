@@ -1,0 +1,9 @@
+
+
+VÍ dụ chức năng thêm địa chỉ: (method: POST - xem trong controller module Address)
+1. Khi người dùng click vào nút địa chỉ, hệ thống(Frontend) sẽ show ra form thêm địa chỉ
+2. Sau khi nhập đầy đủ thông tin => người dùng click vào nút thêm địa chỉ
+3. Hệ thống sẽ xử lý (controller - hàm createAddress() trong address.controller.ts - hàm này được lấy từ trong address.service.ts)
+5. Sau khi xử lý hệ thống sẽ trả về dữ liệu cho người dùng (nếu có lỗi hệ thống cũng sẽ trả về lỗi cho người dùng)
+* data success: object{message: 'success', statusCode: 200, data: - dữ liệu tương ứng theo module}
+* data error: object{message: 'error', statusCode: 400}

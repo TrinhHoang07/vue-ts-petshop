@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ArrowIcon from '@/assets/icons/ArrowIcon.vue';
 import BiSearch from '@/assets/icons/BiSearch.vue';
 import HiMenu from '@/assets/icons/HiMenu.vue';
 import IoSend from '@/assets/icons/IoSend.vue';
@@ -39,6 +40,33 @@ onMounted(() => {
                     .then((response: T_Conversation) => {
                         if (response.message === 'success') {
                             conversations.value = [...response.data, ...res.data];
+
+                            if (route) {
+                                const user = conversations.value.find(
+                                    (conver) => conver.conver_id === +route.params.id,
+                                );
+
+                                if (user) {
+                                    infoUser.value = {
+                                        id: user.cus_id,
+                                        name: user.cus_name,
+                                        avatar: user.cus_avatar_path,
+                                    };
+                                }
+
+                                // handle get message from id conversation
+
+                                apiService.chats
+                                    .getMessagesByConversationId(route.params.id as string, infos.user?.token ?? '')
+                                    .then((res: T_Message) => {
+                                        if (res.message === 'success') {
+                                            dataMessages.value = res.data;
+                                            inputRef.value?.focus();
+                                        }
+                                    })
+                                    .catch((err) => console.error(err));
+                            }
+
                             loading.value = false;
                         }
                     })
@@ -115,7 +143,6 @@ watch(route, () => {
 });
 
 watch(dataMessages, () => {
-    console.log('call scroll bottom');
     setTimeout(() => {
         scrollToBottom();
     }, 500);

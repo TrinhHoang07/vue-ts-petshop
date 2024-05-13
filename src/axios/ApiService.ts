@@ -84,6 +84,7 @@ export class ApiService {
             addOrder: 'orders/create',
             getOrderById: (userId: string) => `orders/get-order-id/${userId}`,
             updateStatus: (orderId: string) => `orders/status/${orderId}`,
+            deleteOrderById: (orderId: string) => `orders/delete/${orderId}`,
         };
 
         return {
@@ -95,6 +96,12 @@ export class ApiService {
                 }),
             getOrderById: (userId: string, token: string) =>
                 AxiosClientApi.get(route.getOrderById(userId), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            deleteOrderById: (userId: string, token: string) =>
+                AxiosClientApi.delete(route.deleteOrderById(userId), {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
