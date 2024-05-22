@@ -43,12 +43,12 @@ const onSubmit = () => {
     } else {
         apiService.customer
             .updatePassword(
-                (infos.user?.id as number).toString(),
+                (infos.data.user?.id as number).toString(),
                 {
                     password: newPass.value,
                     oldPassword: prevPass.value,
                 },
-                infos.user?.token ?? '',
+                infos.data.user?.token ?? '',
             )
             .then((res: { message: string; statusCode: number; detail?: string }) => {
                 if (res.message === 'mismatched') {

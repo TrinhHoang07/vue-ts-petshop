@@ -3,12 +3,13 @@ import FaCart from '@/assets/icons/FaCart.vue';
 import logo from '@/assets/images/dog_item_1.jpg';
 import routesConfig from '@/config/routes';
 import { useSession } from '@/stores';
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import ButtonView from '../ButtonView.vue';
 import { ApiService } from '@/axios/ApiService';
 import type { T_Cart, T_Categorys } from '@/model';
 import { formatVND } from '@/Helper';
+import { socketContext, stateEvents } from '@/context/SocketContext';
 
 const apiService = new ApiService();
 
@@ -33,10 +34,25 @@ const data = reactive<{
     data: [],
 });
 
+const handleGetCarts = () => {
+    apiService.carts
+        .getCartsByUserId(`${infos.data.user.id}`, infos.data.user.token ?? '')
+        .then((res: T_Categorys) => {
+            if (res.message === 'success') {
+                data.data = res.data;
+            }
+        })
+        .catch((err) => console.error(err));
+};
+
 onMounted(() => {
-    if (infos.isAuth) {
+    console.log('infos', infos);
+});
+
+onMounted(() => {
+    if (infos.data.isAuth) {
         apiService.carts
-            .getCartsByUserId(`${infos.user.id}`, infos.user.token ?? '')
+            .getCartsByUserId(`${infos.data.user.id}`, infos.data.user.token ?? '')
             .then((res: T_Categorys) => {
                 if (res.message === 'success') {
                     data.data = res.data;
@@ -44,6 +60,24 @@ onMounted(() => {
             })
             .catch((err) => console.error(err));
     }
+});
+
+onMounted(() => {
+    socketContext.on('connect', () => {
+        console.log('socket connected CART');
+        socketContext.on('add-to-cart-give', (_) => {
+            console.log('add to CART ON', _);
+
+            apiService.carts
+                .getCartsByUserId(`${infos.data.user.id}`, infos.data.user.token ?? '')
+                .then((res: T_Categorys) => {
+                    if (res.message === 'success') {
+                        data.data = res.data;
+                    }
+                })
+                .catch((err) => console.error(err));
+        });
+    });
 });
 </script>
 
@@ -56,7 +90,7 @@ onMounted(() => {
             </div>
         </RouterLink>
         <div id="carts-list-small" class="carts">
-            <template v-if="infos.isAuth">
+            <template v-if="infos.data.isAuth">
                 <h3 class="heading">Sản phẩm mới thêm</h3>
                 <div class="contents">
                     <template v-if="data.data.length > 0">

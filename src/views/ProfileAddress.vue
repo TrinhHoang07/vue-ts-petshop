@@ -28,9 +28,9 @@ const dataAddress = reactive<{
 const addresses = ref<Address[]>([]);
 
 onMounted(() => {
-    if (infos.isAuth) {
+    if (infos.data.isAuth) {
         apiService.address
-            .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
+            .getAddressesById(infos.data.user?.id?.toString() ?? '', infos.data.user?.token ?? '')
             .then((res: T_ProfileAddress) => {
                 if (res.message === 'success') {
                     addresses.value = [...res.data];
@@ -43,10 +43,10 @@ onMounted(() => {
 onMounted(() => {
     if (stateEvents.connected) {
         socketContext?.on('create-address-give', (_) => {
-            if (infos.isAuth) {
+            if (infos.data.isAuth) {
                 console.log('listening add ' + socketContext);
                 apiService.address
-                    .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
+                    .getAddressesById(infos.data.user?.id?.toString() ?? '', infos.data.user?.token ?? '')
                     .then((res: T_ProfileAddress) => {
                         if (res.message === 'success') {
                             console.log('addresses' + res.data.length);
@@ -58,10 +58,10 @@ onMounted(() => {
         });
 
         socketContext?.on('update-address-give', (_) => {
-            if (infos.isAuth) {
+            if (infos.data.isAuth) {
                 console.log('listening update ' + socketContext);
                 apiService.address
-                    .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
+                    .getAddressesById(infos.data.user?.id?.toString() ?? '', infos.data.user?.token ?? '')
                     .then((res: T_ProfileAddress) => {
                         if (res.message === 'success') {
                             console.log('addresses' + res.data);
@@ -84,7 +84,7 @@ const confirmHandle = (value: string) => {
         icon: 'pi pi-exclamation-triangle',
         accept() {
             apiService.address
-                .deleteAddressById(value, infos.user?.token ?? '')
+                .deleteAddressById(value, infos.data.user?.token ?? '')
                 .then((res: { message: string; statusCode: number }) => {
                     if (res.message === 'success') {
                         toast.add({
@@ -95,7 +95,7 @@ const confirmHandle = (value: string) => {
                         });
 
                         apiService.address
-                            .getAddressesById(infos.user?.id?.toString() ?? '', infos.user?.token ?? '')
+                            .getAddressesById(infos.data.user?.id?.toString() ?? '', infos.data.user?.token ?? '')
                             .then((res: T_ProfileAddress) => {
                                 if (res.message === 'success') {
                                     addresses.value = res.data;

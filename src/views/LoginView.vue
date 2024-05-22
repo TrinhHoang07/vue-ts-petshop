@@ -40,6 +40,22 @@ const handleLogin = () => {
                     birthdate: res.data.birth_day,
                 });
 
+                const data = {
+                    isAuth: true,
+                    user: {
+                        id: res.data.id,
+                        name: res.data.name,
+                        email: res.data.email,
+                        phone: res.data.phone_number,
+                        token: res.data.access_token,
+                        avatar: res.data.avatar,
+                        gender: res.data.gender,
+                        birthdate: res.data.birth_day,
+                    },
+                };
+
+                localStorage.setItem('userDataHT', JSON.stringify(data));
+
                 if (route.options.history.state.back) {
                     route.push(route.options.history.state.back as any);
                 } else {

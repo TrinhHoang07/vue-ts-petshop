@@ -88,7 +88,7 @@ export class ApiService {
         };
 
         return {
-            addOrder: (data: TPostOrders, token: string) =>
+            addOrder: (data: TPostOrders[], token: string) =>
                 AxiosClientApi.post(route.addOrder, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,

@@ -55,7 +55,7 @@ onMounted(() => {
     });
 
     apiService.address
-        .getAddressesById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getAddressesById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: T_ProfileAddress) => {
             if (res.message === 'success') {
                 addresses.value = res.data;
@@ -101,9 +101,9 @@ onMounted(() => {
     }
 });
 
-const handleGetPaymentById = (res: { url: string; id: number }, id_original?: number) => {
+const handleGetPaymentById = (res: { url: string; id: number }, id_original?: number[]) => {
     apiService.payments
-        .getPaymentById(`${res.id}`, infos.user?.token ?? '')
+        .getPaymentById(`${res.id}`, infos.data.user?.token ?? '')
         .then((res: T_Payment) => {
             if (res.message === 'success' && res.data.state === '00') {
                 statePay.value = 'success';
@@ -145,72 +145,82 @@ const handleGetPaymentById = (res: { url: string; id: number }, id_original?: nu
         });
 };
 
-const handleDeleteFromCart = (id: number) => {
-    apiService.carts
-        .deleteFromCart(`${id}`, infos.user.token ?? '')
-        .then((res: { message: string; statusCode: number }) => {
-            if (res.message === 'success') {
-                //////////////////
-                console.log('da xoa thanh cong san pham da mua trong gio hang');
-            }
-        })
-        .catch((err) => console.error(err));
+const handleDeleteFromCart = (id: number[]) => {
+    if (id.length > 0) {
+        id.forEach((id) => {
+            apiService.carts
+                .deleteFromCart(`${id}`, infos.data.user.token ?? '')
+                .then((res: { message: string; statusCode: number }) => {
+                    if (res.message === 'success') {
+                        //////////////////
+                        console.log('da xoa thanh cong san pham da mua trong gio hang');
+                    }
+                })
+                .catch((err) => console.error(err));
+        });
+    }
 };
 
-const handleDeleteOrder = (id: number) => {
-    apiService.orders
-        .deleteOrderById(`${id}`, infos.user.token ?? '')
-        .then((res: { message: string; statusCode: number }) => {
-            if (res.message === 'success') {
-                //////////////////
-                console.log('da xoa thanh cong san pham da mua error');
-            }
-        })
-        .catch((err) => console.error(err));
+const handleDeleteOrder = (id: number[]) => {
+    console.log(id);
+    if (id.length > 0) {
+        id.forEach((id) => {
+            apiService.orders
+                .deleteOrderById(`${id}`, infos.data.user.token ?? '')
+                .then((res: { message: string; statusCode: number }) => {
+                    if (res.message === 'success') {
+                        //////////////////
+                        console.log('da xoa thanh cong san pham da mua error');
+                    }
+                })
+                .catch((err) => console.error(err));
+        });
+    }
 };
 
 const handleOrders = () => {
     if (items.data.length > 0) {
         statePay.value = 'paying';
 
-        // chưa handle mua nhiều mặt hàng một lúc
-        const dataPost = {
-            customer_id: infos.user?.id,
-            product_id: items.data[0].id,
-            quantity: items.data[0].quantity,
-            price: items.data[0].price,
-        };
+        const dataPosts = items.data.map((item) => ({
+            customer_id: infos.data.user.id,
+            product_id: item.id,
+            quantity: item.quantity,
+            price: item.price,
+        }));
 
-        console.log('orders: ', dataPost);
+        const idsDeleteCart = items.data.map((item) => item.id_original);
+
+        console.log('orders: ', dataPosts);
         console.log('payment' + paymentChoose.value.method);
 
         if (paymentChoose.value.method === 'CASH') {
-            apiService.orders.addOrder(dataPost, infos.user.token ?? '').then((res: T_AddOrder) => {
+            apiService.orders.addOrder(dataPosts, infos.data.user.token ?? '').then((res: T_AddOrder) => {
                 if (res.message === 'success') {
                     statePay.value = 'success';
-                    handleDeleteFromCart(items.data[0].id_original);
+                    handleDeleteFromCart(idsDeleteCart);
                 }
             });
         } else {
             apiService.orders
-                .addOrder(dataPost, infos.user?.token ?? '')
+                .addOrder(dataPosts, infos.data.user?.token ?? '')
                 .then((resContainer: T_AddOrder) => {
                     if (resContainer.message === 'success') {
-                        handleDeleteFromCart(items.data[0].id_original);
+                        handleDeleteFromCart(idsDeleteCart);
 
                         return apiService.payments
                             .addPayment(
                                 {
                                     state: '99',
-                                    order_id: resContainer.data.id,
+                                    order_id: resContainer.data[0].id,
                                 },
-                                infos.user?.token ?? '',
+                                infos.data.user?.token ?? '',
                             )
                             .then((res: T_Payment) => {
                                 if (res.message === 'success') {
                                     return {
                                         res,
-                                        original_id: resContainer.data.id,
+                                        original_id: resContainer.data.map((item) => item.id),
                                     };
                                 }
                             })
@@ -227,7 +237,7 @@ const handleOrders = () => {
                                 // bankCode: 'VNPAYQR',
                                 orderInfo: 'Test thanh toan VN PAY QR',
                             },
-                            infos.user?.token ?? '',
+                            infos.data.user?.token ?? '',
                         )
                         .then((res: { url: string; id: number }) => {
                             if (res.url) {

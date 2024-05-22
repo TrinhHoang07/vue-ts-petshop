@@ -72,14 +72,14 @@ const handleSubmit = () => {
 
         const dataPost: TPostCreateAddress = {
             full_name: name.value,
-            customer_id: infos.user?.id ?? 0,
+            customer_id: infos.data.user?.id ?? 0,
             phone_number: phone.value,
             main_address: cityDetail.value,
             detail_address: detail.value,
             type: typeAddress.value,
         };
         apiService.address
-            .createAddress(dataPost, infos.user?.token ?? '')
+            .createAddress(dataPost, infos.data.user?.token ?? '')
             .then((res) => {
                 if (res.message === 'success') {
                     handleCloseForm();
@@ -92,7 +92,7 @@ const handleSubmit = () => {
                     });
 
                     socketContext.emit('create-address', {
-                        id: infos.user?.id,
+                        id: infos.data.user?.id,
                         status: 'success',
                     });
                 }
@@ -115,7 +115,7 @@ const handleSubmit = () => {
             type: typeAddress.value,
         };
         apiService.address
-            .updateAddressById(infos.user?.id?.toString() ?? '', dataPost, infos.user?.token ?? '')
+            .updateAddressById(infos.data.user?.id?.toString() ?? '', dataPost, infos.data.user?.token ?? '')
             .then((res) => {
                 console.log(res);
                 if (res.message === 'success') {
@@ -129,7 +129,7 @@ const handleSubmit = () => {
                     });
 
                     socketContext.emit('update-address', {
-                        id: infos.user?.id,
+                        id: infos.data.user?.id,
                         status: 'success',
                     });
                 } else {

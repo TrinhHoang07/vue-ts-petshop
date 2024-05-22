@@ -40,7 +40,7 @@ watch(value, () => {
                 {
                     search: value.value.trim(),
                 },
-                infos.user?.token ?? '',
+                infos.data.user?.token ?? '',
             )
             .then((res: T_Customers) => {
                 if (res.message === 'success') {
@@ -70,7 +70,7 @@ onMounted(() => {
 
 const handleGetFriends = () => {
     apiService.friendship
-        .getFriendedById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getFriendedById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: TFriended) => {
             if (res.message === 'success') {
                 friends.value = res.data;
@@ -85,7 +85,7 @@ const handleGetFriends = () => {
 
 const handleGetCountRequestFriend = () => {
     apiService.friendship
-        .getFriendGiveInviteById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getFriendGiveInviteById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: T_FriendGiveInvite) => {
             if (res.message === 'success') {
                 countRequestFriend.value = res.data.length;
@@ -167,7 +167,7 @@ const setIsOpenFriendRequest = (data: boolean) => {
                 <div class="list-friends">
                     <FriendItem
                         v-if="friends.length > 0"
-                        v-for="item in friends.filter((item) => item.customer_id !== infos.user.id)"
+                        v-for="item in friends.filter((item) => item.customer_id !== infos.data.user.id)"
                         :key="item.customer_id"
                         :avatar_friend="item.customer_avatar_path"
                         :name_friend="item.customer_name"

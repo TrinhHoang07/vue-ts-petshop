@@ -35,8 +35,8 @@ const handleOpenSearch = () => {
                 <BiSearch />
             </span>
             <RouterLink class="action-item user-icon" :to="routesConfig.profile">
-                <div v-if="infos.user && infos.user.avatar" class="user-avatar">
-                    <img :src="infos.user.avatar" alt="avatar user" />
+                <div v-if="infos.data.user && infos.data.user.avatar" class="user-avatar">
+                    <img :src="infos.data.user.avatar" alt="avatar user" />
                 </div>
                 <FaUser v-else />
             </RouterLink>

@@ -41,7 +41,7 @@ onMounted(() => {
     loading.value = true;
 
     apiService.carts
-        .getCartsByUserId(`${infos.user?.id}`, infos.user?.token ?? '')
+        .getCartsByUserId(`${infos.data.user?.id}`, infos.data.user?.token ?? '')
         .then((res: T_Categorys) => {
             if (res.message === 'success') {
                 console.log('data:', res.data);
@@ -60,8 +60,8 @@ onMounted(() => {
                     }));
 
                     data.data = result;
-                    loading.value = false;
                 }
+                loading.value = false;
             }
         })
         .catch((err) => console.error(err));
@@ -265,9 +265,9 @@ const handleDownQuantity = (value: TData) => {
                 >
                     <div class="user">
                         <div class="preview">
-                            <img :src="infos.user?.avatar" alt="user" />
+                            <img :src="infos.data.user?.avatar" alt="user" />
                         </div>
-                        <h3 class="user-name">{{ infos.user?.name }}</h3>
+                        <h3 class="user-name">{{ infos.data.user?.name }}</h3>
                     </div>
                 </RouterLink>
             </div>

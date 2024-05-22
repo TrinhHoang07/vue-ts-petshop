@@ -27,7 +27,7 @@ onMounted(() => {
 
 const handleGetIdsInvited = () => {
     apiService.friendship
-        .getFriendInviteById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getFriendInviteById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: T_FriendGiveInvite) => {
             idsInvited.value = res.data.map((item: any) => item.friendship_customer_id);
         })
@@ -36,7 +36,7 @@ const handleGetIdsInvited = () => {
 
 const handleGetIdsGiveInvited = () => {
     apiService.friendship
-        .getFriendGiveInviteById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getFriendGiveInviteById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: T_FriendGiveInvite) => {
             if (res.message === 'success') {
                 idsGiveInvite.value = res.data.map((item: any) => item.friendship_customerInvite_id);
@@ -49,10 +49,10 @@ const handleAddNewInviteFriend = () => {
         .addNewInviteFriend(
             {
                 status: 'waiting',
-                customer_invite: infos.user?.id ?? 0,
+                customer_invite: infos.data.user?.id ?? 0,
                 customer_id: data.data.id,
             },
-            infos.user?.token ?? '',
+            infos.data.user?.token ?? '',
         )
         .then((res: { message: string; statusCode: number }) => {
             if (res.message === 'success') {
@@ -88,10 +88,10 @@ const handleRemoveInvite = () => {
             apiService.friendship
                 .deleteFriendshipById(
                     {
-                        customer_invite: infos.user?.id ?? 0,
+                        customer_invite: infos.data.user?.id ?? 0,
                         customer_id: data.data.id,
                     },
-                    infos.user?.token ?? '',
+                    infos.data.user?.token ?? '',
                 )
                 .then((res: { message: string; statusCode: number }) => {
                     if (res.message === 'success') {
@@ -121,10 +121,10 @@ const handleAcceptInvite = () => {
         .acceptFriendship(
             {
                 customer_invite: data.data.id,
-                customer_id: infos.user?.id ?? 0,
+                customer_id: infos.data.user?.id ?? 0,
                 status: 'friended',
             },
-            infos.user?.token ?? '',
+            infos.data.user?.token ?? '',
         )
         .then((res: { message: string; statusCode: number }) => {
             if (res.message === 'success') {
@@ -147,9 +147,9 @@ const handleChat = () => {
         .checkCreatedConversation(
             {
                 customer_id: data.data.id,
-                created_id: infos.user?.id ?? 0,
+                created_id: infos.data.user?.id ?? 0,
             },
-            infos.user?.token ?? '',
+            infos.data.user?.token ?? '',
         )
         .then((res: TCheckConversation) => {
             if (res.message === 'success') {
@@ -158,10 +158,10 @@ const handleChat = () => {
                 apiService.chats
                     .addNewChat(
                         {
-                            created_by_customer: infos.user?.id ?? 0,
+                            created_by_customer: infos.data.user?.id ?? 0,
                             customer_id: data.data.id,
                         },
-                        infos.user?.token ?? '',
+                        infos.data.user?.token ?? '',
                     )
                     .then((res: { message: string; statusCode: number; data: { id_conver: number } }) => {
                         if (res.message === 'success') {

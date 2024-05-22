@@ -137,22 +137,22 @@ onMounted(() => {
 });
 
 onMounted(() => {
-    if (infos.user) {
+    if (infos.data.user) {
         data.data = {
             day: {
-                day: infos.user.birthdate && infos.user.birthdate.split('/')[0],
+                day: infos.data.user.birthdate && infos.data.user.birthdate.split('/')[0],
             },
             month: {
-                month: infos.user.birthdate && infos.user.birthdate.split('/')[1],
+                month: infos.data.user.birthdate && infos.data.user.birthdate.split('/')[1],
             },
             year: {
-                year: infos.user.birthdate && infos.user.birthdate.split('/')[2],
+                year: infos.data.user.birthdate && infos.data.user.birthdate.split('/')[2],
             },
-            email: infos.user.email,
-            gender: infos.user.gender,
-            name: infos.user.name,
-            phoneNumber: infos.user.phone,
-            avatar: infos.user.avatar,
+            email: infos.data.user.email,
+            gender: infos.data.user.gender,
+            name: infos.data.user.name,
+            phoneNumber: infos.data.user.phone,
+            avatar: infos.data.user.avatar,
         };
     }
 });
@@ -169,6 +169,8 @@ const handleLogout = () => {
         rejectLabel: 'Hủy bỏ',
         accept: () => {
             setSessions(false, {});
+
+            localStorage.removeItem('userDataHT');
 
             toast.add({
                 severity: 'success',
@@ -193,7 +195,7 @@ const handleUpdateAvatar = (e: any) => {
         imageAvatar.value = URL.createObjectURL(files[0]);
 
         axios
-            .post(`${App.URL_MAIN}customers/test/upload/${infos.user.id}`, formData, {
+            .post(`${App.URL_MAIN}customers/test/upload/${infos.data.user.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -203,13 +205,13 @@ const handleUpdateAvatar = (e: any) => {
                     const newInfos = {
                         ...infos,
                         user: {
-                            ...infos.user,
-                            id: infos.user.id ?? 0,
+                            ...infos.data.user,
+                            id: infos.data.user.id ?? 0,
                             avatar: res.data.linkAvatar,
                         },
                     };
 
-                    setSessions(infos.isAuth, newInfos as any);
+                    setSessions(infos.data.isAuth, newInfos as any);
 
                     toast.add({
                         severity: 'success',
@@ -233,19 +235,19 @@ const handleUpdateAvatar = (e: any) => {
 const handleSubmit = () => {
     apiService.customer
         .updateCustomerById(
-            `${infos.user.id}`,
+            `${infos.data.user.id}`,
             {
                 phone_number: data.data.phoneNumber,
                 gender: data.data.gender,
                 birth_date: `${data.data.day?.day}/${data.data.month?.month}/${data.data.year?.year}`,
             },
-            infos.user.token ?? '',
+            infos.data.user.token ?? '',
         )
         .then((res: T_CustomerUpdate) => {
             if (res.message === 'success') {
-                setSessions(infos.isAuth, {
-                    ...infos.user,
-                    id: infos.user.id ?? 0,
+                setSessions(infos.data.isAuth, {
+                    ...infos.data.user,
+                    id: infos.data.user.id ?? 0,
                     name: res.data.name,
                     phone: res.data.phone_number,
                     birthdate: res.data.birth_date,
@@ -452,10 +454,10 @@ const handleSubmit = () => {
                                 :src="
                                     imageAvatar.length > 0
                                         ? imageAvatar
-                                        : infos.user &&
-                                          infos.user.avatar &&
-                                          (infos.user?.avatar as string).length > 0
-                                        ? infos.user?.avatar
+                                        : infos.data.user &&
+                                          infos.data.user.avatar &&
+                                          (infos.data.user?.avatar as string).length > 0
+                                        ? infos.data.user?.avatar
                                         : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
                                 "
                                 alt="prev view avatar"

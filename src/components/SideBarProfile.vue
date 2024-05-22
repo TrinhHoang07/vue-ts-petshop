@@ -24,15 +24,15 @@ const route = useRoute();
                     :src="
                         props.temporaryImage
                             ? props.temporaryImage
-                            : infos.user?.avatar && infos.user.avatar.length > 0
-                            ? infos.user.avatar
+                            : infos.data.user?.avatar && infos.data.user.avatar.length > 0
+                            ? infos.data.user.avatar
                             : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
                     "
                     alt="avatar-user"
                 />
             </div>
             <div class="info-user">
-                <h3 class="user-name">{{ infos.user?.name }}</h3>
+                <h3 class="user-name">{{ infos.data.user?.name }}</h3>
                 <RouterLink :to="routesConfig.profile">
                     <AiOutlineEdit />
                     <span>Sửa hồ sơ</span>

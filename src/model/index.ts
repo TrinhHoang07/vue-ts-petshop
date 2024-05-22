@@ -357,7 +357,7 @@ export type T_AddOrder = {
         quantity: number;
         price: number;
         status: string;
-    };
+    }[];
 };
 
 // type blogs

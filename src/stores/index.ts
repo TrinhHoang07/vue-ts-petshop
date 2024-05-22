@@ -14,14 +14,18 @@ type Users = {
 };
 
 export const useSession = defineStore('infoUser', () => {
-    const infos = reactive<{ isAuth: boolean; user: Users }>({
-        isAuth: false,
-        user: {},
+    const infos = reactive<{
+        data: { isAuth: boolean; user: Users };
+    }>({
+        data: {
+            isAuth: false,
+            user: {},
+        },
     });
 
     const setSessions = (isAuth: boolean, data: Users) => {
-        infos.isAuth = isAuth;
-        infos.user = data;
+        infos.data.isAuth = isAuth;
+        infos.data.user = data;
     };
 
     return { infos, setSessions };

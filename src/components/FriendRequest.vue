@@ -21,7 +21,7 @@ const { setDataProfile } = dataProfile();
 
 onMounted(() => {
     apiService.friendship
-        .getFriendGiveInviteById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getFriendGiveInviteById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: T_FriendGiveInvite) => {
             data.value = res.data;
         })
@@ -48,7 +48,7 @@ const handleAcceptFriendship = (item: FriendGiveInvite) => {
                 customer_id: item.friendship_customer_id,
                 status: 'friended',
             },
-            infos.user?.token ?? '',
+            infos.data.user?.token ?? '',
         )
         .then((res: { message: string; statusCode: number }) => {
             if (res.message === 'success') {

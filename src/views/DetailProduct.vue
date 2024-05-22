@@ -8,7 +8,7 @@ import NavBarNewsPage from '@/components/NavBarNewsPage.vue';
 import Loading from '@/components/Loading.vue';
 import Similar from '@/components/Similar.vue';
 import { useSession } from '@/stores';
-import { socketContext } from '@/context/SocketContext';
+import { socketContext, stateEvents } from '@/context/SocketContext';
 import { ApiService } from '@/axios/ApiService';
 import { useToast } from 'primevue/usetoast';
 import { useRoute } from 'vue-router';
@@ -93,22 +93,25 @@ const apiService = new ApiService();
 const toast = useToast();
 
 const handleAddToCart = () => {
-    if (infos.isAuth) {
+    if (infos.data.isAuth) {
         apiService.carts
             .addToCart(
                 {
                     product_id: values.data?.id ?? 0,
-                    customer_id: infos.user?.id ?? 0,
+                    customer_id: infos.data.user?.id ?? 0,
                     quantity: quantity.value,
                 },
-                infos.user?.token ?? '',
+                infos.data.user?.token ?? '',
             )
             .then((res: T_AddCart) => {
                 if (res.message === 'success') {
-                    socketContext.emit('add-to-cart', {
-                        id: res.data.product_id,
-                        status: 'success',
-                    });
+                    console.log('event: ', stateEvents.connected);
+                    if (stateEvents.connected) {
+                        socketContext.emit('add-to-cart', {
+                            id: res.data.product_id,
+                            status: 'success',
+                        });
+                    }
 
                     toast.add({
                         severity: 'success',

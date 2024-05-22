@@ -20,7 +20,7 @@ const content = ref<string>('');
 
 onMounted(() => {
     apiService.notifications
-        .getNotificationsById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getNotificationsById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: any) => {
             if (res.message === 'success') {
                 console.log('res data: ' + res.data);
@@ -46,7 +46,7 @@ watch(active, () => {
 
 const handleSeen = (id: number) => {
     apiService.notifications
-        .updateSeen(id.toString(), infos.user?.token ?? '')
+        .updateSeen(id.toString(), infos.data.user?.token ?? '')
         .then((res: any) => {
             if (res.message === 'success') {
                 const dataNew = [...data.value];

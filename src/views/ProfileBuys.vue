@@ -28,7 +28,7 @@ const confirm = useConfirm();
 
 onMounted(() => {
     apiService.orders
-        .getOrderById(`${infos.user?.id}`, infos.user?.token as string)
+        .getOrderById(`${infos.data.user?.id}`, infos.data.user?.token as string)
         .then((res: T_Orders) => {
             if (res.message === 'success') {
                 data.value = res.data;
@@ -86,7 +86,7 @@ onMounted(() => {
 
                                 apiService.orders.updateStatus((dataDetail?.orders_id as number).toString(), {
                                     status: 'cancel',
-                                }, infos.user.token ?? '')
+                                }, infos.data.user.token ?? '')
                                     .then((res: any) => {
                                         if(res.message === 'success') {
                                             toast.add({
@@ -97,7 +97,7 @@ onMounted(() => {
                                             isDetail = false;
 
                                             apiService.orders
-                                                .getOrderById(`${infos.user?.id}`, infos.user?.token as string)
+                                                .getOrderById(`${infos.data.user?.id}`, infos.data.user?.token as string)
                                                 .then((res: T_Orders) => {
                                                     if (res.message === 'success') {
                                                         data = res.data;

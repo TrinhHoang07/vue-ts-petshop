@@ -37,7 +37,7 @@ onMounted(() => {
 
 const handleGetIdsInvited = () => {
     apiService.friendship
-        .getFriendInviteById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getFriendInviteById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: T_FriendGiveInvite) => {
             idsInvited.value = res.data.map((item: FriendGiveInvite) => item.friendship_customer_id);
         })
@@ -46,7 +46,7 @@ const handleGetIdsInvited = () => {
 
 const handleGetIdsGiveInvited = () => {
     apiService.friendship
-        .getFriendGiveInviteById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getFriendGiveInviteById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: T_FriendGiveInvite) => {
             if (res.message === 'success') {
                 idsGiveInvite.value = res.data.map((item: FriendGiveInvite) => item.friendship_customerInvite_id);
@@ -56,7 +56,7 @@ const handleGetIdsGiveInvited = () => {
 
 const handleGetIdsFriended = () => {
     apiService.friendship
-        .getFriendedById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getFriendedById((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: TFriended) => {
             idsFriended.value = res.data.map((item: Friended) => item.customer_id);
         })
@@ -68,10 +68,10 @@ const handleAddNewInviteFriend = (id: number) => {
         .addNewInviteFriend(
             {
                 status: 'waiting',
-                customer_invite: infos.user?.id ?? 0,
+                customer_invite: infos.data.user?.id ?? 0,
                 customer_id: id,
             },
-            infos.user?.token ?? '',
+            infos.data.user?.token ?? '',
         )
         .then((res: { message: string; statusCode: number }) => {
             if (res.message === 'success') {
@@ -107,10 +107,10 @@ const handleRemoveInvite = (id: number) => {
             apiService.friendship
                 .deleteFriendshipById(
                     {
-                        customer_invite: infos.user?.id ?? 0,
+                        customer_invite: infos.data.user?.id ?? 0,
                         customer_id: id,
                     },
-                    infos.user?.token ?? '',
+                    infos.data.user?.token ?? '',
                 )
                 .then((res: { message: string; statusCode: number }) => {
                     if (res.message === 'success') {
@@ -149,10 +149,10 @@ const handleAcceptInvite = () => {
         .acceptFriendship(
             {
                 customer_invite: props.id_friend,
-                customer_id: infos.user?.id ?? 0,
+                customer_id: infos.data.user?.id ?? 0,
                 status: 'friended',
             },
-            infos.user?.token ?? '',
+            infos.data.user?.token ?? '',
         )
         .then((res: { message: string; statusCode: number }) => {
             if (res.message === 'success') {
@@ -168,7 +168,7 @@ const handleAcceptInvite = () => {
 
 <template>
     <div class="friend-item">
-        <RouterLink v-if="infos.user.id === props.id_friend" :to="routesConfig.profile">
+        <RouterLink v-if="infos.data.user.id === props.id_friend" :to="routesConfig.profile">
             <div class="f-avatar">
                 <img :src="props.avatar_friend" :alt="props.name_friend" />
             </div>
@@ -179,7 +179,7 @@ const handleAcceptInvite = () => {
             </div>
         </RouterLink>
         <div class="f-info">
-            <RouterLink v-if="infos.user.id === props.id_friend" :to="routesConfig.profile">
+            <RouterLink v-if="infos.data.user.id === props.id_friend" :to="routesConfig.profile">
                 <div>
                     <h5>{{ props.name_friend }}</h5>
                     <p>{{ props.cm_friend }} bạn chung</p>
@@ -196,7 +196,7 @@ const handleAcceptInvite = () => {
                 </div>
             </RouterLink>
 
-            <Button v-if="infos.user.id === props.id_friend" small="true" :to="routesConfig.profile">
+            <Button v-if="infos.data.user.id === props.id_friend" small="true" :to="routesConfig.profile">
                 Trang cá nhân
             </Button>
             <ButtonView v-else-if="props.status === 'friended' || idsFriended.includes(props.id_friend)" small="true"

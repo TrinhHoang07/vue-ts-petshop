@@ -32,11 +32,14 @@ const { infos } = useSession();
 
 onMounted(() => {
     apiService.chats
-        .getCustomerConversationByCreatedId((infos.user?.id as number).toString(), infos.user?.token ?? '')
+        .getCustomerConversationByCreatedId((infos.data.user?.id as number).toString(), infos.data.user?.token ?? '')
         .then((res: T_Conversation) => {
             if (res.message === 'success') {
                 apiService.chats
-                    .getJoinedConversationsById((infos.user?.id as number).toString(), infos.user?.token ?? '')
+                    .getJoinedConversationsById(
+                        (infos.data.user?.id as number).toString(),
+                        infos.data.user?.token ?? '',
+                    )
                     .then((response: T_Conversation) => {
                         if (response.message === 'success') {
                             conversations.value = [...response.data, ...res.data];
@@ -57,7 +60,10 @@ onMounted(() => {
                                 // handle get message from id conversation
 
                                 apiService.chats
-                                    .getMessagesByConversationId(route.params.id as string, infos.user?.token ?? '')
+                                    .getMessagesByConversationId(
+                                        route.params.id as string,
+                                        infos.data.user?.token ?? '',
+                                    )
                                     .then((res: T_Message) => {
                                         if (res.message === 'success') {
                                             dataMessages.value = res.data;
@@ -131,7 +137,7 @@ watch(route, () => {
         // handle get message from id conversation
 
         apiService.chats
-            .getMessagesByConversationId(route.params.id as string, infos.user?.token ?? '')
+            .getMessagesByConversationId(route.params.id as string, infos.data.user?.token ?? '')
             .then((res: T_Message) => {
                 if (res.message === 'success') {
                     dataMessages.value = res.data;
@@ -152,13 +158,13 @@ const handleSubmit = () => {
     if (inputValue.value.trim().length > 0) {
         const dataSent = {
             conversation_id: +route.params.id,
-            sender_id: infos.user?.id ?? 0,
+            sender_id: infos.data.user?.id ?? 0,
             receiver_id: infoUser.value?.id ?? 0,
             content: inputValue.value.trim(),
         };
 
         apiService.chats
-            .addNewMessageByConversationId(dataSent, infos.user?.token ?? '')
+            .addNewMessageByConversationId(dataSent, infos.data.user?.token ?? '')
             .then(
                 (res: {
                     message: string;
@@ -174,7 +180,7 @@ const handleSubmit = () => {
                     if (res.message === 'success') {
                         socketContext.emit(`chat-message-user`, {
                             ...res.data,
-                            cus_avatar_path: infos.user?.avatar,
+                            cus_avatar_path: infos.data.user?.avatar,
                         });
 
                         inputValue.value = '';
@@ -231,7 +237,7 @@ const handleSubmitMessage = (e: any) => {
                                 <div class="item-info-ch">
                                     <h6>{{ item.cus_name }}</h6>
                                     <p class="last-message">
-                                        {{ item.sender_id === infos.user?.id ? 'Bạn: ' : '' }}
+                                        {{ item.sender_id === infos.data.user?.id ? 'Bạn: ' : '' }}
                                         {{ item.messages_content }}
                                     </p>
                                 </div>
@@ -260,7 +266,7 @@ const handleSubmitMessage = (e: any) => {
                                 :key="item.message_id"
                                 class="message-item"
                                 :class="{
-                                    me_message: item.message_sender_id === infos.user?.id,
+                                    me_message: item.message_sender_id === infos.data.user?.id,
                                 }"
                             >
                                 <div v-if="item.message_content.trim().length > 0" class="message-item-avatar">
@@ -270,7 +276,7 @@ const handleSubmitMessage = (e: any) => {
                                     v-if="item.message_content.trim().length > 0"
                                     class="content-message-item"
                                     :class="{
-                                        content_me_message: item.message_sender_id === infos.user?.id,
+                                        content_me_message: item.message_sender_id === infos.data.user?.id,
                                     }"
                                 >
                                     {{ item.message_content }}
